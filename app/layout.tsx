@@ -16,10 +16,23 @@ export const metadata: Metadata = {
   },
 };
 
+/* Critical dark-theme CSS injected as raw string so it survives hydration */
+const CRITICAL_CSS = `
+html, body {
+  background: #0f0f13 !important;
+  color: #f8fafc !important;
+  color-scheme: dark !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning style={{ colorScheme: "dark", background: "#0f0f13" }}>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -32,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
       </head>
-      <body suppressHydrationWarning style={{ background: "#0f0f13", color: "#f8fafc", fontFamily: "'Inter', sans-serif" }}>
+      <body suppressHydrationWarning>
         <nav style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
           background: "rgba(15,15,19,0.92)", backdropFilter: "blur(20px)",
