@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import AdUnit from "@/components/AdUnit";
+import MapBackground from "@/components/MapBackground";
 
 interface Deal {
   id: number;
@@ -140,6 +141,8 @@ export default function HomePage() {
 
       {/* Hero */}
       <section style={{ position: "relative", padding: "80px 24px 60px", textAlign: "center", overflow: "hidden" }}>
+        <MapBackground />
+        
         <div style={{ position: "absolute", top: -100, left: "20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(249,115,22,0.15),transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", top: -80, right: "15%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(139,92,246,0.12),transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 700, margin: "0 auto" }}>
