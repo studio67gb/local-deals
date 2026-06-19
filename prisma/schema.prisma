@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  name        String
+  slug        String   @unique
+  category    String
+  area        String
+  description String
+  logo        String?
+  website     String?
+  phone       String?
+  email       String?
+  address     String?
+  instagram   String?
+  facebook    String?
+  tiktok      String?
+  active      Boolean  @default(true)
+  featured    Boolean  @default(false)
+
+  // Map coordinates (geocoded from address)
+  lat         Float?
+  lng         Float?
+
+  // Self-registration approval
+  status      String   @default("active") // active | pending | rejected
+  ownerName   String?
+  ownerEmail  String?
+
+  // Business portal login
+  ownerPassword String?
+
+  deals       Deal[]
+  sessions    BusinessSession[]
+}
+
+model BusinessSession {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  businessId Int
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+}
+
+model Deal {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  businessId  Int
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+  offerCode   String?
+  terms       String?
+  expiresAt   DateTime?
+  claimCount  Int       @default(0)
+  active      Boolean   @default(true)
+  featured    Boolean   @default(false)
+
+  claims      Claim[]
+}
+
+model Claim {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  dealId    Int
+  deal      Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+}
