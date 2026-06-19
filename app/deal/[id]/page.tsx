@@ -12,6 +12,9 @@ interface DealDetail {
   expiresAt: string | null;
   claimCount: number;
   featured: boolean;
+  imageUrl: string | null;
+  rating: number | null;
+  reviewCount: number | null;
   business: {
     name: string;
     category: string;
@@ -252,9 +255,15 @@ export default function DealPage() {
       </div>
 
       {/* Deal card */}
-      <div className="card" style={{ padding: 28 }}>
+      <div className="card" style={{ padding: 28, overflow: "hidden" }}>
+        {deal.imageUrl && (
+          <div style={{ margin: "-28px -28px 24px -28px", height: 260, position: "relative" }}>
+            <img src={deal.imageUrl} alt={deal.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+        )}
+
         {deal.featured && (
-          <div style={{ background: "linear-gradient(135deg,#0D9488,#F43F5E)", padding: "6px 16px", margin: "-28px -28px 24px", display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ background: "linear-gradient(135deg,#0D9488,#F43F5E)", padding: "6px 16px", margin: deal.imageUrl ? "0 -28px 24px" : "-28px -28px 24px", display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ fontSize: 11, fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "0.08em" }}>⭐ Featured Deal</span>
           </div>
         )}

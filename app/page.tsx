@@ -10,6 +10,9 @@ interface Deal {
   featured: boolean;
   claimCount: number;
   distanceMiles?: number;
+  imageUrl: string | null;
+  rating: number | null;
+  reviewCount: number | null;
   business: {
     name: string;
     category: string;
@@ -33,45 +36,62 @@ const PILL_MAP: Record<string, string> = {
 };
 
 function DealCard({ deal }: { deal: Deal }) {
+  const imgUrl = deal.imageUrl || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop";
+  const rating = deal.rating || 4.1;
+  const reviews = deal.reviewCount || 1259;
+
   return (
     <a href={`/deal/${deal.id}`} style={{ textDecoration: "none" }}>
-      <div className="card" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        {deal.featured && (
-          <div style={{ padding: "6px 16px", background: "linear-gradient(135deg,#0D9488,#F43F5E)", display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 10, fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "0.08em" }}>⭐ Featured Deal</span>
-          </div>
-        )}
-        <div style={{ padding: "20px", flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span className={`pill ${PILL_MAP[deal.business.category] || "pill-other"}`}>{deal.business.category}</span>
-            <span style={{ fontSize: 11, color: "var(--text-dim)", fontWeight: 600 }}>{deal.business.area}</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
-              {deal.business.logo ? (
-                <img src={deal.business.logo} alt={deal.business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              ) : (
-                <span style={{ fontSize: 14 }}>🏪</span>
-              )}
+      <div className="card" style={{ height: "100%", display: "flex", flexDirection: "column", padding: 0, overflow: "hidden" }}>
+        
+        {/* Image & Overlays */}
+        <div style={{ position: "relative", width: "100%", height: 220 }}>
+          <img src={imgUrl} alt={deal.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          
+          {/* Popular Gift / Featured Badge */}
+          {deal.featured && (
+            <div style={{ position: "absolute", top: 12, left: 12, background: "white", padding: "4px 10px", borderRadius: 4, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
+              <span style={{ fontSize: 13 }}>🎁</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#0F172A" }}>Popular Gift</span>
             </div>
-            <div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, marginBottom: 2 }}>{deal.business.name}</div>
-              <div style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", lineHeight: 1.3 }}>{deal.title}</div>
-            </div>
+          )}
+
+          {/* Heart Icon Overlay */}
+          <div style={{ position: "absolute", top: 12, right: 12, background: "white", width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           </div>
-          <div style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, flex: 1, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-            {deal.description}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 12, borderTop: "1px solid var(--border)" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <span style={{ fontSize: 12, color: "var(--text-dim)" }}>🔥 {deal.claimCount} claimed</span>
-              {deal.distanceMiles !== undefined && deal.distanceMiles !== null && (
-                <span style={{ fontSize: 11, color: "#F43F5E", fontWeight: 700 }}>📍 {deal.distanceMiles.toFixed(1)} miles away</span>
-              )}
-            </div>
-            <span className="btn btn-primary" style={{ padding: "8px 18px", fontSize: 12 }}>View Deal →</span>
+
+          {/* Carousel dots */}
+          <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 5, background: "rgba(0,0,0,0.4)", padding: "5px 10px", borderRadius: 12 }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "white" }} />
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
           </div>
         </div>
+
+        {/* Card Content */}
+        <div style={{ padding: "16px", flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ fontSize: 13, color: "var(--text-muted)" }}>{deal.business.name}</div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: "var(--text)", lineHeight: 1.4 }}>{deal.title}</div>
+          
+          <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
+            <div style={{ display: "flex", color: "#fbbf24", fontSize: 15 }}>
+              ★★★★<span style={{ color: "var(--border)" }}>★</span>
+            </div>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginLeft: 4 }}>{rating.toFixed(1)}</span>
+            <span style={{ fontSize: 14, color: "var(--text-dim)" }}>({reviews.toLocaleString()})</span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 16 }}>
+             <span style={{ fontSize: 12, color: "var(--text-dim)" }}>🔥 {deal.claimCount} claimed</span>
+             {deal.distanceMiles !== undefined && deal.distanceMiles !== null && (
+                <span style={{ fontSize: 12, color: "#0D9488", fontWeight: 700 }}>📍 {deal.distanceMiles.toFixed(1)} miles away</span>
+             )}
+          </div>
+        </div>
+
       </div>
     </a>
   );
@@ -79,9 +99,10 @@ function DealCard({ deal }: { deal: Deal }) {
 
 function SkeletonCard() {
   return (
-    <div className="card" style={{ height: 220 }}>
-      <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 12 }}>
-        {[60, 100, 140, 40].map((w, i) => (
+    <div className="card" style={{ height: 380, padding: 0, overflow: "hidden" }}>
+      <div style={{ height: 220, width: "100%", background: "rgba(255,255,255,0.06)", animation: "pulse 1.5s ease infinite" }} />
+      <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+        {[100, 220, 140, 80].map((w, i) => (
           <div key={i} style={{ height: 14, width: w, borderRadius: 6, background: "rgba(255,255,255,0.06)", animation: "pulse 1.5s ease infinite" }} />
         ))}
       </div>

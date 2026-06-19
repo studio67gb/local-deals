@@ -79,6 +79,9 @@ model Deal {
   claimCount  Int       @default(0)
   active      Boolean   @default(true)
   featured    Boolean   @default(false)
+  imageUrl    String?
+  rating      Float?
+  reviewCount Int?
 
   claims      Claim[]
 }
