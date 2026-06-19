@@ -118,10 +118,12 @@ export default function PricingPage() {
             {t.popular && (
               <div style={{
                 position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
-                background: "linear-gradient(135deg, #0D9488, #F43F5E)",
-                color: "white", fontSize: 11, fontWeight: 800, textTransform: "uppercase",
+                background: "#fef08a",
+                color: "#854d0e",
+                border: "1px solid #fde047",
+                fontSize: 11, fontWeight: 800, textTransform: "uppercase",
                 letterSpacing: "0.06em", padding: "5px 18px", borderRadius: 999,
-              }}>Most Popular</div>
+              }}>Best Value</div>
             )}
 
             <div style={{ padding: "36px 28px 28px" }}>
