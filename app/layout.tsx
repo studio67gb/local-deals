@@ -18,8 +18,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning style={{ colorScheme: "dark", background: "#0f0f13" }}>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
         {/* Google AdSense verification — must be in <head> for crawler */}
         {ADSENSE_CLIENT && ADSENSE_CLIENT !== "ca-pub-PENDING" && (
           <script
@@ -29,10 +32,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         )}
       </head>
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning style={{ background: "#0f0f13", color: "#f8fafc", fontFamily: "'Inter', sans-serif" }}>
         <nav style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          background: "rgba(15,15,19,0.85)", backdropFilter: "blur(20px)",
+          background: "rgba(15,15,19,0.92)", backdropFilter: "blur(20px)",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
           padding: "0 24px", height: "60px",
           display: "flex", alignItems: "center", justifyContent: "space-between"
@@ -47,10 +50,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span style={{ fontWeight: 800, fontSize: 17, color: "#f1f5f9" }}>Local<span style={{ color: "#f97316" }}>Deals</span></span>
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <a href="/map" style={{ color: "var(--text-muted)", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</a>
-            <a href="/about" style={{ color: "var(--text-muted)", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>About</a>
-            <a href="/register" style={{ color: "var(--text-muted)", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>List Your Business</a>
-            <a href="/business/login" style={{ color: "var(--text-muted)", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>Business Login</a>
+            <a href="/map" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</a>
+            <a href="/about" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>About</a>
+            <a href="/register" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>List Your Business</a>
+            <a href="/business/login" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>Business Login</a>
             <a href="/admin" className="btn btn-primary" style={{ padding: "8px 18px", fontSize: 13 }}>Admin</a>
           </div>
         </nav>
