@@ -28,8 +28,14 @@ interface Business {
   tiktok: string | null;
   logo: string | null;
   status: string;
+  tier: string;
+  stripeCustomerId: string | null;
   deals: Deal[];
 }
+
+const TIER_LIMITS: Record<string, number> = { free: 1, standard: 3, featured: 999 };
+const TIER_COLORS: Record<string, string> = { free: "#94a3b8", standard: "#f97316", featured: "#8b5cf6" };
+const TIER_LABELS: Record<string, string> = { free: "Free", standard: "Standard", featured: "Featured" };
 
 // ─── Social Share Panel ───────────────────────────────────────────────────────
 function buildCaption(biz: Business, deal: Deal): string {
@@ -332,7 +338,10 @@ export default function BusinessDashboard() {
               : <span style={{ fontSize: 24 }}>🏪</span>}
           </div>
           <div>
-            <div style={{ fontSize: 12, color: "#f97316", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 3 }}>Business Dashboard</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+              <span style={{ fontSize: 12, color: "#f97316", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>Business Dashboard</span>
+              <span style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", padding: "3px 10px", borderRadius: 999, background: `${TIER_COLORS[business.tier || "free"]}20`, color: TIER_COLORS[business.tier || "free"], border: `1px solid ${TIER_COLORS[business.tier || "free"]}40` }}>{TIER_LABELS[business.tier || "free"]} Plan</span>
+            </div>
             <h1 style={{ fontSize: 24, fontWeight: 900, marginBottom: 2 }}>{business.name}</h1>
             <div style={{ fontSize: 13, color: "var(--text-muted)" }}>{business.category} · {business.area}</div>
             {business.status === "pending" && (
@@ -340,8 +349,35 @@ export default function BusinessDashboard() {
             )}
           </div>
         </div>
-        <button onClick={logout} className="btn btn-ghost" style={{ fontSize: 13 }}>Log Out</button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {(business.tier === "free" || business.tier === "standard" || !business.tier) && (
+            <a href="/pricing" className="btn btn-primary" style={{ fontSize: 12, padding: "8px 16px" }}>⬆️ Upgrade</a>
+          )}
+          {business.stripeCustomerId && (
+            <button onClick={async () => { const r = await fetch("/api/stripe/portal", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ businessId: business.id }) }); if (r.ok) { const { url } = await r.json(); window.location.href = url; } }} className="btn btn-ghost" style={{ fontSize: 12, padding: "8px 16px" }}>💳 Billing</button>
+          )}
+          <button onClick={logout} className="btn btn-ghost" style={{ fontSize: 13 }}>Log Out</button>
+        </div>
       </div>
+
+      {/* Deal Limit Bar */}
+      {(() => {
+        const tier = business.tier || "free";
+        const limit = TIER_LIMITS[tier] || 1;
+        const used = business.deals.filter(d => d.active).length;
+        const pct = Math.min((used / limit) * 100, 100);
+        return (
+          <div style={{ marginBottom: 28, padding: 16, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>Active Deals: {used}/{limit === 999 ? "∞" : limit}</span>
+              {tier !== "featured" && <a href="/pricing" style={{ fontSize: 11, color: "#f97316", textDecoration: "none", fontWeight: 700 }}>Need more? Upgrade →</a>}
+            </div>
+            <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 99, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${pct}%`, background: pct >= 100 ? "#f87171" : TIER_COLORS[tier], borderRadius: 99, transition: "width 0.3s" }} />
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Stats strip */}
       {activeDeal && (

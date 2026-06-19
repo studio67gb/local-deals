@@ -64,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <a href="/map" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</a>
+            <a href="/pricing" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>💰 Pricing</a>
             <a href="/about" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>About</a>
             <a href="/register" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>List Your Business</a>
             <a href="/business/login" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>Business Login</a>

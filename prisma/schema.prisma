@@ -41,6 +41,12 @@ model Business {
   // Business portal login
   ownerPassword String?
 
+  // Subscription tier
+  tier              String    @default("free") // free | standard | featured
+  stripeCustomerId  String?   @unique
+  stripeSubId       String?   @unique
+  tierExpiresAt     DateTime?
+
   deals       Deal[]
   sessions    BusinessSession[]
 }

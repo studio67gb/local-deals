@@ -1,10 +1,16 @@
 "use client";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const CATEGORIES = ["Restaurant & Food","Beauty & Hair","Health & Fitness","Retail & Shopping","Trades & Services","Entertainment","Automotive","Other"];
 const AREAS = ["Doncaster","Goole","Sheffield","Rotherham","Barnsley","Wakefield","Hull","Leeds","York","Other - UK Wide"];
+const PLAN_LABELS: Record<string, string> = { standard: "Standard — £5/mo", featured: "Featured — £15/mo" };
+const PLAN_COLORS: Record<string, string> = { standard: "#f97316", featured: "#8b5cf6" };
 
-export default function RegisterPage() {
+function RegisterForm() {
+  const searchParams = useSearchParams();
+  const selectedPlan = searchParams.get("plan") || "free";
   const [step, setStep] = useState<"form" | "done">("form");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -62,6 +68,20 @@ export default function RegisterPage() {
           }),
         });
       }
+
+      // If paid plan selected, redirect to Stripe Checkout
+      if (selectedPlan === "standard" || selectedPlan === "featured") {
+        const checkoutRes = await fetch("/api/stripe/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ businessId: biz.id, tier: selectedPlan }),
+        });
+        if (checkoutRes.ok) {
+          const { url } = await checkoutRes.json();
+          window.location.href = url;
+          return;
+        }
+      }
       setStep("done");
     } catch {
       setError("Something went wrong. Please try again.");
@@ -90,8 +110,8 @@ export default function RegisterPage() {
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 80px" }}>
       {/* Hero */}
       <div style={{ textAlign: "center", marginBottom: 48 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(249,115,22,0.1)", border: "1px solid rgba(249,115,22,0.2)", borderRadius: 999, padding: "6px 16px", marginBottom: 20 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#f97316", textTransform: "uppercase", letterSpacing: "0.06em" }}>🏪 Free to Join</span>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `rgba(${selectedPlan === "featured" ? "139,92,246" : "249,115,22"},0.1)`, border: `1px solid rgba(${selectedPlan === "featured" ? "139,92,246" : "249,115,22"},0.2)`, borderRadius: 999, padding: "6px 16px", marginBottom: 20 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: PLAN_COLORS[selectedPlan] || "#f97316", textTransform: "uppercase", letterSpacing: "0.06em" }}>🏪 {PLAN_LABELS[selectedPlan] || "Free to Join"}</span>
         </div>
         <h1 style={{ fontSize: 36, fontWeight: 900, lineHeight: 1.1, marginBottom: 12 }}>
           List Your Business on<br /><span className="gradient-text">LocalDeals</span>
@@ -222,13 +242,21 @@ export default function RegisterPage() {
 
         {error && <p style={{ color: "#f87171", fontSize: 13, textAlign: "center" }}>{error}</p>}
 
-        <button className="btn btn-primary" type="submit" disabled={loading} style={{ justifyContent: "center", padding: "18px 24px", fontSize: 16 }}>
-          {loading ? "Submitting..." : "Submit My Listing — It&apos;s Free →"}
+        <button className="btn btn-primary" type="submit" disabled={loading} style={{ justifyContent: "center", padding: "18px 24px", fontSize: 16, ...(selectedPlan === "featured" ? { background: "linear-gradient(135deg, #8b5cf6, #7c3aed)" } : {}) }}>
+          {loading ? "Submitting..." : selectedPlan !== "free" ? `Register & Subscribe — ${PLAN_LABELS[selectedPlan]}` : "Submit My Listing — It&apos;s Free →"}
         </button>
         <p style={{ fontSize: 11, color: "var(--text-dim)", textAlign: "center" }}>
           Your listing will be reviewed and live within 24 hours. No payment required.
         </p>
       </form>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }}>Loading...</div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }
