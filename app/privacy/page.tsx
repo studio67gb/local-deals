@@ -59,7 +59,7 @@ export default function PrivacyPage() {
       <div style={{ marginTop: 48, padding: 24, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12 }}>
         <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.7 }}>
           This website uses Google AdSense. Google AdSense uses cookies to serve ads based on your visit to this and other websites.
-          You may opt out of personalised advertising at <a href="https://www.google.com/settings/ads" target="_blank" rel="noreferrer" style={{ color: "#f97316" }}>Google Ads Settings</a>.
+          You may opt out of personalised advertising at <a href="https://www.google.com/settings/ads" target="_blank" rel="noreferrer" style={{ color: "#0D9488" }}>Google Ads Settings</a>.
         </p>
       </div>
     </div>

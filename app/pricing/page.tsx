@@ -41,7 +41,7 @@ const TIERS = [
       "Priority in search",
     ],
     cta: "Subscribe — £5/mo",
-    color: "#f97316",
+    color: "#0D9488",
     popular: true,
   },
   {
@@ -62,7 +62,7 @@ const TIERS = [
     ],
     notIncluded: [],
     cta: "Go Featured — £15/mo",
-    color: "#8b5cf6",
+    color: "#F43F5E",
     popular: false,
   },
 ];
@@ -93,10 +93,10 @@ export default function PricingPage() {
       <div style={{ textAlign: "center", marginBottom: 60 }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8,
-          background: "rgba(249,115,22,0.1)", border: "1px solid rgba(249,115,22,0.2)",
+          background: "rgba(13,148,136,0.1)", border: "1px solid rgba(13,148,136,0.2)",
           borderRadius: 999, padding: "6px 16px", marginBottom: 20,
         }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#f97316", textTransform: "uppercase", letterSpacing: "0.06em" }}>💰 Simple Pricing</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#0D9488", textTransform: "uppercase", letterSpacing: "0.06em" }}>💰 Simple Pricing</span>
         </div>
         <h1 style={{ fontSize: 42, fontWeight: 900, lineHeight: 1.1, marginBottom: 16 }}>
           Grow Your Business with<br /><span className="gradient-text">LocalDeals</span>
@@ -112,13 +112,13 @@ export default function PricingPage() {
           <div key={t.key} className="card" style={{
             padding: 0,
             position: "relative",
-            border: t.popular ? "2px solid rgba(249,115,22,0.5)" : undefined,
+            border: t.popular ? "2px solid rgba(13,148,136,0.5)" : undefined,
             transform: t.popular ? "scale(1.04)" : undefined,
           }}>
             {t.popular && (
               <div style={{
                 position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
-                background: "linear-gradient(135deg, #f97316, #8b5cf6)",
+                background: "linear-gradient(135deg, #0D9488, #F43F5E)",
                 color: "white", fontSize: 11, fontWeight: 800, textTransform: "uppercase",
                 letterSpacing: "0.06em", padding: "5px 18px", borderRadius: 999,
               }}>Most Popular</div>
@@ -144,9 +144,9 @@ export default function PricingPage() {
                 style={{
                   width: "100%", justifyContent: "center", padding: "14px 24px", fontSize: 15,
                   ...(t.key === "featured" ? {
-                    background: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+                    background: "linear-gradient(135deg, #F43F5E, #7c3aed)",
                     color: "white", border: "none",
-                    boxShadow: "0 4px 20px rgba(139,92,246,0.35)",
+                    boxShadow: "0 4px 20px rgba(244,63,94,0.35)",
                   } : {}),
                 }}
               >

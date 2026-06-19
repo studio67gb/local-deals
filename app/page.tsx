@@ -37,7 +37,7 @@ function DealCard({ deal }: { deal: Deal }) {
     <a href={`/deal/${deal.id}`} style={{ textDecoration: "none" }}>
       <div className="card" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         {deal.featured && (
-          <div style={{ padding: "6px 16px", background: "linear-gradient(135deg,#f97316,#8b5cf6)", display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ padding: "6px 16px", background: "linear-gradient(135deg,#0D9488,#F43F5E)", display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ fontSize: 10, fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "0.08em" }}>⭐ Featured Deal</span>
           </div>
         )}
@@ -66,7 +66,7 @@ function DealCard({ deal }: { deal: Deal }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <span style={{ fontSize: 12, color: "var(--text-dim)" }}>🔥 {deal.claimCount} claimed</span>
               {deal.distanceMiles !== undefined && deal.distanceMiles !== null && (
-                <span style={{ fontSize: 11, color: "#f97316", fontWeight: 700 }}>📍 {deal.distanceMiles.toFixed(1)} miles away</span>
+                <span style={{ fontSize: 11, color: "#F43F5E", fontWeight: 700 }}>📍 {deal.distanceMiles.toFixed(1)} miles away</span>
               )}
             </div>
             <span className="btn btn-primary" style={{ padding: "8px 18px", fontSize: 12 }}>View Deal →</span>
@@ -143,11 +143,11 @@ export default function HomePage() {
       <section style={{ position: "relative", padding: "80px 24px 60px", textAlign: "center", overflow: "hidden" }}>
         <MapBackground />
         
-        <div style={{ position: "absolute", top: -100, left: "20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(249,115,22,0.15),transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", top: -80, right: "15%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(139,92,246,0.12),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: -100, left: "20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(13,148,136,0.15),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: -80, right: "15%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(244,63,94,0.12),transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 700, margin: "0 auto" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(249,115,22,0.1)", border: "1px solid rgba(249,115,22,0.2)", borderRadius: 999, padding: "6px 16px", marginBottom: 24 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#f97316", textTransform: "uppercase", letterSpacing: "0.06em" }}>🎉 Exclusive Local Offers</span>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.2)", borderRadius: 999, padding: "6px 16px", marginBottom: 24 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#F43F5E", textTransform: "uppercase", letterSpacing: "0.06em" }}>🎉 Exclusive Local Offers</span>
           </div>
           <h1 style={{ fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 900, lineHeight: 1.1, marginBottom: 16 }}>
             The Best Deals from<br />
@@ -177,9 +177,9 @@ export default function HomePage() {
             onClick={handleNearMe}
             disabled={locLoading}
             style={{ 
-              background: lat ? "rgba(249,115,22,0.15)" : "rgba(255,255,255,0.05)",
-              border: lat ? "1px solid rgba(249,115,22,0.4)" : "1px solid var(--border)",
-              color: lat ? "#f97316" : "var(--text)",
+              background: lat ? "rgba(244,63,94,0.15)" : "rgba(255,255,255,0.05)",
+              border: lat ? "1px solid rgba(244,63,94,0.4)" : "1px solid var(--border)",
+              color: lat ? "#F43F5E" : "var(--text)",
               padding: "10px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 
             }}
           >

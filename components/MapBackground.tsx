@@ -85,10 +85,10 @@ export default function MapBackground() {
           icon: {
             path: window.google.maps.SymbolPath.CIRCLE,
             scale: 6, // Smaller for background
-            fillColor: "#f97316", // Orange
-            fillOpacity: 0.6,
-            strokeColor: "#ffffff",
-            strokeWeight: 1,
+            fillColor: "#F43F5E", // Coral
+            fillOpacity: 0.9,
+            strokeWeight: 2,
+            strokeColor: "#E11D48",
             strokeOpacity: 0.5
           },
           clickable: false,

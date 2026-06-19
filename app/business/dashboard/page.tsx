@@ -36,7 +36,7 @@ interface Business {
 }
 
 const TIER_LIMITS: Record<string, number> = { free: 1, standard: 3, featured: 999 };
-const TIER_COLORS: Record<string, string> = { free: "#94a3b8", standard: "#f97316", featured: "#8b5cf6" };
+const TIER_COLORS: Record<string, string> = { free: "#94a3b8", standard: "#0D9488", featured: "#F43F5E" };
 const TIER_LABELS: Record<string, string> = { free: "Free", standard: "Standard", featured: "Featured" };
 
 // ─── Social Share Panel ───────────────────────────────────────────────────────
@@ -96,10 +96,10 @@ function SharePanel({ business, deal }: { business: Business; deal: Deal }) {
         <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 8 }}>📸 TikTok & Instagram — paste the copied caption into your post or story</p>
       </div>
 
-      <div style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.15)", borderRadius: 10, padding: 14 }}>
+      <div style={{ background: "rgba(13,148,136,0.06)", border: "1px solid rgba(13,148,136,0.15)", borderRadius: 10, padding: 14 }}>
         <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
           💡 <strong style={{ color: "var(--text)" }}>Print a QR code</strong> to put on your counter, windows or leaflets:{" "}
-          <a href={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer" style={{ color: "#f97316" }}>Generate QR Code →</a>
+          <a href={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer" style={{ color: "#0D9488" }}>Generate QR Code →</a>
         </p>
       </div>
     </div>
@@ -223,8 +223,8 @@ function ProfileTab({ business, onUpdated }: { business: Business; onUpdated: (b
             onClick={() => fileRef.current?.click()}
             style={{
               width: 80, height: 80, borderRadius: "50%", flexShrink: 0,
-              background: logoPreview ? "none" : "linear-gradient(135deg,#f97316,#8b5cf6)",
-              border: "3px dashed rgba(249,115,22,0.4)",
+              background: logoPreview ? "none" : "linear-gradient(135deg,#0D9488,#F43F5E)",
+              border: "3px dashed rgba(13,148,136,0.4)",
               cursor: "pointer", position: "relative", overflow: "hidden",
               display: "flex", alignItems: "center", justifyContent: "center",
               transition: "border-color 0.2s",
@@ -331,11 +331,11 @@ function GrowthPromo({ business, onUpdated }: { business: Business; onUpdated: (
   };
 
   return (
-    <div style={{ marginBottom: 28, background: "linear-gradient(135deg, rgba(249,115,22,0.1), rgba(139,92,246,0.1))", border: "1px solid rgba(249,115,22,0.3)", borderRadius: 12, padding: 20 }}>
+    <div style={{ marginBottom: 28, background: "linear-gradient(135deg, rgba(13,148,136,0.1), rgba(244,63,94,0.1))", border: "1px solid rgba(13,148,136,0.3)", borderRadius: 12, padding: 20 }}>
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
         <div style={{ fontSize: 32 }}>🚀</div>
         <div style={{ flex: 1 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 4, color: "#f97316" }}>Get 1 Month of Standard Plan for FREE</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 4, color: "#0D9488" }}>Get 1 Month of Standard Plan for FREE</h3>
           <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 16, lineHeight: 1.5 }}>
             Share your LocalDeals listing on your Facebook or Instagram page! Paste the link to your post below, and we'll upgrade you to the Standard plan (£5/mo value) free for 30 days!
           </p>
@@ -401,14 +401,14 @@ export default function BusinessDashboard() {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           {/* Logo */}
-          <div style={{ width: 56, height: 56, borderRadius: 14, overflow: "hidden", background: "linear-gradient(135deg,#f97316,#8b5cf6)", flexShrink: 0, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 56, height: 56, borderRadius: 14, overflow: "hidden", background: "linear-gradient(135deg,#0D9488,#F43F5E)", flexShrink: 0, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {business.logo
               ? <Image src={business.logo} alt={business.name} fill style={{ objectFit: "cover" }} sizes="56px" unoptimized />
               : <span style={{ fontSize: 24 }}>🏪</span>}
           </div>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-              <span style={{ fontSize: 12, color: "#f97316", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>Business Dashboard</span>
+              <span style={{ fontSize: 12, color: "#0D9488", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>Business Dashboard</span>
               <span style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", padding: "3px 10px", borderRadius: 999, background: `${TIER_COLORS[business.tier || "free"]}20`, color: TIER_COLORS[business.tier || "free"], border: `1px solid ${TIER_COLORS[business.tier || "free"]}40` }}>{TIER_LABELS[business.tier || "free"]} Plan</span>
             </div>
             <h1 style={{ fontSize: 24, fontWeight: 900, marginBottom: 2 }}>{business.name}</h1>
@@ -441,7 +441,7 @@ export default function BusinessDashboard() {
           <div style={{ marginBottom: 28, padding: 16, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>Active Deals: {used}/{limit === 999 ? "∞" : limit}</span>
-              {tier !== "featured" && <a href="/pricing" style={{ fontSize: 11, color: "#f97316", textDecoration: "none", fontWeight: 700 }}>Need more? Upgrade →</a>}
+              {tier !== "featured" && <a href="/pricing" style={{ fontSize: 11, color: "#0D9488", textDecoration: "none", fontWeight: 700 }}>Need more? Upgrade →</a>}
             </div>
             <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 99, overflow: "hidden" }}>
               <div style={{ height: "100%", width: `${pct}%`, background: pct >= 100 ? "#f87171" : TIER_COLORS[tier], borderRadius: 99, transition: "width 0.3s" }} />
@@ -478,8 +478,8 @@ export default function BusinessDashboard() {
           ] as const).map(t => (
             <button key={t.key} onClick={() => setTab(t.key)} style={{
               flex: 1, padding: "13px 8px", background: "none", border: "none", minWidth: 90,
-              borderBottom: tab === t.key ? "2px solid #f97316" : "2px solid transparent",
-              color: tab === t.key ? "#f97316" : "var(--text-muted)",
+              borderBottom: tab === t.key ? "2px solid #0D9488" : "2px solid transparent",
+              color: tab === t.key ? "#0D9488" : "var(--text-muted)",
               fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap",
             }}>{t.label}</button>
           ))}
@@ -501,10 +501,10 @@ export default function BusinessDashboard() {
               <h2 style={{ fontSize: 16, fontWeight: 800, marginBottom: 4 }}>Your Current Deal</h2>
               {activeDeal ? (
                 <>
-                  <div style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.15)", borderRadius: 12, padding: 20 }}>
+                  <div style={{ background: "rgba(13,148,136,0.06)", border: "1px solid rgba(13,148,136,0.15)", borderRadius: 12, padding: 20 }}>
                     <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>{activeDeal.title}</div>
                     <div style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.7 }}>{activeDeal.description}</div>
-                    {activeDeal.offerCode && <div style={{ marginTop: 12, fontFamily: "monospace", fontSize: 18, fontWeight: 800, color: "#f97316" }}>{activeDeal.offerCode}</div>}
+                    {activeDeal.offerCode && <div style={{ marginTop: 12, fontFamily: "monospace", fontSize: 18, fontWeight: 800, color: "#0D9488" }}>{activeDeal.offerCode}</div>}
                   </div>
                   <a href={`/deal/${activeDeal.id}`} target="_blank" rel="noreferrer" className="btn btn-ghost" style={{ alignSelf: "flex-start" }}>View Public Listing →</a>
                 </>
@@ -516,7 +516,7 @@ export default function BusinessDashboard() {
                 <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
                   {business.phone && <span>📞 {business.phone}</span>}
                   {business.address && <span>📍 {business.address}</span>}
-                  {business.website && <span>🌐 <a href={business.website} style={{ color: "#f97316" }}>{business.website}</a></span>}
+                  {business.website && <span>🌐 <a href={business.website} style={{ color: "#0D9488" }}>{business.website}</a></span>}
                   {business.tiktok && <span>🎵 <a href={business.tiktok} target="_blank" rel="noreferrer" style={{ color: "#ff0050" }}>TikTok</a></span>}
                   {business.instagram && <span>📸 {business.instagram}</span>}
                   {business.facebook && <span>📘 {business.facebook}</span>}

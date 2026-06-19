@@ -6,7 +6,7 @@ import { Suspense } from "react";
 const CATEGORIES = ["Restaurant & Food","Beauty & Hair","Health & Fitness","Retail & Shopping","Trades & Services","Entertainment","Automotive","Other"];
 const AREAS = ["Doncaster","Goole","Sheffield","Rotherham","Barnsley","Wakefield","Hull","Leeds","York","Other - UK Wide"];
 const PLAN_LABELS: Record<string, string> = { standard: "Standard — £5/mo", featured: "Featured — £15/mo" };
-const PLAN_COLORS: Record<string, string> = { standard: "#f97316", featured: "#8b5cf6" };
+const PLAN_COLORS: Record<string, string> = { standard: "#0D9488", featured: "#F43F5E" };
 
 function RegisterForm() {
   const searchParams = useSearchParams();
@@ -98,8 +98,8 @@ function RegisterForm() {
           We&apos;ve received your registration for <strong style={{ color: "var(--text)" }}>{form.name}</strong>.
           Our team will review your listing and get it live within 24 hours.
         </p>
-        <div style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", borderRadius: 12, padding: 20, marginBottom: 32 }}>
-          <p style={{ fontSize: 13, color: "var(--text-muted)" }}>We&apos;ll email you at <strong style={{ color: "#f97316" }}>{form.ownerEmail}</strong> once your listing is approved.</p>
+        <div style={{ background: "rgba(13,148,136,0.08)", border: "1px solid rgba(13,148,136,0.2)", borderRadius: 12, padding: 20, marginBottom: 32 }}>
+          <p style={{ fontSize: 13, color: "var(--text-muted)" }}>We&apos;ll email you at <strong style={{ color: "#0D9488" }}>{form.ownerEmail}</strong> once your listing is approved.</p>
         </div>
         <a href="/" className="btn btn-primary">Browse Local Deals →</a>
       </div>
@@ -110,8 +110,8 @@ function RegisterForm() {
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 80px" }}>
       {/* Hero */}
       <div style={{ textAlign: "center", marginBottom: 48 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `rgba(${selectedPlan === "featured" ? "139,92,246" : "249,115,22"},0.1)`, border: `1px solid rgba(${selectedPlan === "featured" ? "139,92,246" : "249,115,22"},0.2)`, borderRadius: 999, padding: "6px 16px", marginBottom: 20 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: PLAN_COLORS[selectedPlan] || "#f97316", textTransform: "uppercase", letterSpacing: "0.06em" }}>🏪 {PLAN_LABELS[selectedPlan] || "Free to Join"}</span>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `rgba(${selectedPlan === "featured" ? "244,63,94" : "13,148,136"},0.1)`, border: `1px solid rgba(${selectedPlan === "featured" ? "244,63,94" : "13,148,136"},0.2)`, borderRadius: 999, padding: "6px 16px", marginBottom: 20 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: PLAN_COLORS[selectedPlan] || "#0D9488", textTransform: "uppercase", letterSpacing: "0.06em" }}>🏪 {PLAN_LABELS[selectedPlan] || "Free to Join"}</span>
         </div>
         <h1 style={{ fontSize: 36, fontWeight: 900, lineHeight: 1.1, marginBottom: 12 }}>
           List Your Business on<br /><span className="gradient-text">LocalDeals</span>
@@ -242,7 +242,7 @@ function RegisterForm() {
 
         {error && <p style={{ color: "#f87171", fontSize: 13, textAlign: "center" }}>{error}</p>}
 
-        <button className="btn btn-primary" type="submit" disabled={loading} style={{ justifyContent: "center", padding: "18px 24px", fontSize: 16, ...(selectedPlan === "featured" ? { background: "linear-gradient(135deg, #8b5cf6, #7c3aed)" } : {}) }}>
+        <button className="btn btn-primary" type="submit" disabled={loading} style={{ justifyContent: "center", padding: "18px 24px", fontSize: 16, ...(selectedPlan === "featured" ? { background: "linear-gradient(135deg, #F43F5E, #7c3aed)" } : {}) }}>
           {loading ? "Submitting..." : selectedPlan !== "free" ? `Register & Subscribe — ${PLAN_LABELS[selectedPlan]}` : "Submit My Listing — It&apos;s Free →"}
         </button>
         <p style={{ fontSize: 11, color: "var(--text-dim)", textAlign: "center" }}>

@@ -9,7 +9,7 @@ type Business = { id: number; name: string; area: string };
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
     <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-      {children}{required && <span style={{ color: '#f97316', marginLeft: 3 }}>*</span>}
+      {children}{required && <span style={{ color: '#0D9488', marginLeft: 3 }}>*</span>}
     </label>
   );
 }
@@ -77,7 +77,7 @@ function NewDealForm() {
             {businesses.length === 0 && (
               <p style={{ fontSize: 12, color: '#fb923c', marginTop: 8 }}>
                 No businesses found.{' '}
-                <a href="/admin/businesses/new" style={{ color: '#f97316', fontWeight: 700 }}>Add one first →</a>
+                <a href="/admin/businesses/new" style={{ color: '#0D9488', fontWeight: 700 }}>Add one first →</a>
               </p>
             )}
           </div>
@@ -129,7 +129,7 @@ function NewDealForm() {
               />
               <span style={{
                 position: 'absolute', inset: 0, borderRadius: 999,
-                background: form.featured ? 'linear-gradient(135deg, #f97316, #8b5cf6)' : 'rgba(255,255,255,0.1)',
+                background: form.featured ? 'linear-gradient(135deg, #0D9488, #F43F5E)' : 'rgba(255,255,255,0.1)',
                 transition: 'background 0.2s',
               }} />
               <span style={{

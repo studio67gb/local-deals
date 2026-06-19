@@ -89,7 +89,7 @@ export default function MapPage() {
     businesses
       .filter(b => b.lat && b.lng)
       .forEach(b => {
-        const color = PILL_COLORS[b.category] || "#f97316";
+        const color = PILL_COLORS[b.category] || "#0D9488";
 
         const marker = new window.google.maps.Marker({
           position: { lat: b.lat!, lng: b.lng! },
@@ -161,9 +161,9 @@ export default function MapPage() {
 
           <div style={{ overflow: "auto", flex: 1 }}>
             {selected && (
-              <div style={{ margin: 12, background: "linear-gradient(135deg,rgba(249,115,22,0.1),rgba(139,92,246,0.1))", border: "1px solid rgba(249,115,22,0.3)", borderRadius: 12, padding: 16 }}>
+              <div style={{ margin: 12, background: "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(244,63,94,0.1))", border: "1px solid rgba(13,148,136,0.3)", borderRadius: 12, padding: 16 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "#f97316", textTransform: "uppercase" }}>Selected</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#0D9488", textTransform: "uppercase" }}>Selected</span>
                   <button onClick={() => setSelected(null)} style={{ background: "none", border: "none", color: "var(--text-dim)", cursor: "pointer", fontSize: 16 }}>×</button>
                 </div>
                 <div style={{ fontWeight: 800, fontSize: 15, color: "var(--text)", marginBottom: 4 }}>{selected.name}</div>
@@ -171,7 +171,7 @@ export default function MapPage() {
                 {selected.address && <div style={{ fontSize: 11, color: "var(--text-dim)", marginBottom: 12 }}>📍 {selected.address}</div>}
                 {selected.deals?.[0] && (
                   <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: 8, padding: "10px 12px", marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, color: "#f97316", fontWeight: 700, marginBottom: 3 }}>🎁 Current Deal</div>
+                    <div style={{ fontSize: 11, color: "#0D9488", fontWeight: 700, marginBottom: 3 }}>🎁 Current Deal</div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{selected.deals[0].title}</div>
                   </div>
                 )}
@@ -193,7 +193,7 @@ export default function MapPage() {
                 onMouseLeave={e => (e.currentTarget.style.background = "none")}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: PILL_COLORS[b.category] || "#f97316", flexShrink: 0 }} />
+                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: PILL_COLORS[b.category] || "#0D9488", flexShrink: 0 }} />
                   <div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{b.name}</div>
                     <div style={{ fontSize: 11, color: "var(--text-dim)" }}>{b.area} · {b.deals?.length || 0} deal{b.deals?.length !== 1 ? "s" : ""}</div>

@@ -31,7 +31,7 @@ export default function BusinessLoginPage() {
       <div style={{ width: "100%", maxWidth: 400 }}>
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div style={{ width: 60, height: 60, borderRadius: 16, background: "linear-gradient(135deg,#f97316,#8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, margin: "0 auto 16px" }}>🏪</div>
+          <div style={{ width: 60, height: 60, borderRadius: 16, background: "linear-gradient(135deg,#0D9488,#F43F5E)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, margin: "0 auto 16px" }}>🏪</div>
           <h1 style={{ fontSize: 26, fontWeight: 900, marginBottom: 6 }}>Business Portal</h1>
           <p style={{ fontSize: 14, color: "var(--text-muted)" }}>Log in to manage your listing & share your deal</p>
         </div>
@@ -74,7 +74,7 @@ export default function BusinessLoginPage() {
           <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid var(--border)", textAlign: "center" }}>
             <p style={{ fontSize: 13, color: "var(--text-dim)" }}>
               Not registered yet?{" "}
-              <a href="/register" style={{ color: "#f97316", fontWeight: 600 }}>List your business free →</a>
+              <a href="/register" style={{ color: "#0D9488", fontWeight: 600 }}>List your business free →</a>
             </p>
           </div>
         </div>

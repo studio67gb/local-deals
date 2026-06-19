@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 /* Critical dark-theme CSS injected as raw string so it survives hydration */
 const CRITICAL_CSS = `
 html, body {
-  background: #0f0f13 !important;
+  background: #0F172A !important;
   color: #f8fafc !important;
   color-scheme: dark !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
@@ -56,11 +56,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{
               width: 32, height: 32, borderRadius: 8,
-              background: "linear-gradient(135deg, #f97316, #8b5cf6)",
+              background: "linear-gradient(135deg, #0D9488, #F43F5E)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: 16, fontWeight: 900, color: "white"
             }}>L</div>
-            <span style={{ fontWeight: 800, fontSize: 17, color: "#f1f5f9" }}>Local<span style={{ color: "#f97316" }}>Deals</span></span>
+            <span style={{ fontWeight: 800, fontSize: 17, color: "#f1f5f9" }}>Local<span style={{ color: "#F43F5E" }}>Deals</span></span>
           </a>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <a href="/map" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</a>

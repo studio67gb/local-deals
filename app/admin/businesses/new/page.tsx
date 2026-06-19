@@ -15,7 +15,7 @@ function toSlug(name: string): string {
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
     <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-      {children}{required && <span style={{ color: '#f97316', marginLeft: 3 }}>*</span>}
+      {children}{required && <span style={{ color: '#0D9488', marginLeft: 3 }}>*</span>}
     </label>
   );
 }

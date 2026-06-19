@@ -86,7 +86,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
         }}>
           {/* Header */}
           <div style={{
-            background: "linear-gradient(135deg, rgba(249,115,22,0.15), rgba(139,92,246,0.15))",
+            background: "linear-gradient(135deg, rgba(13,148,136,0.15), rgba(244,63,94,0.15))",
             borderBottom: "1px solid var(--border)",
             padding: "18px 24px",
             display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -104,7 +104,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
                 <circle
                   cx={26} cy={26} r={radius}
                   fill="none"
-                  stroke="#f97316"
+                  stroke="#0D9488"
                   strokeWidth={4}
                   strokeDasharray={circumference}
                   strokeDashoffset={circumference - progress}
@@ -227,7 +227,7 @@ export default function DealPage() {
       <div className="card" style={{ padding: 28, marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 16 }}>
           {/* Logo */}
-          <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", background: "linear-gradient(135deg,#f97316,#8b5cf6)", flexShrink: 0, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", background: "linear-gradient(135deg,#0D9488,#F43F5E)", flexShrink: 0, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {deal.business.logo
               ? <img src={deal.business.logo} alt={deal.business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               : <span style={{ fontSize: 26 }}>🏪</span>}
@@ -244,7 +244,7 @@ export default function DealPage() {
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, fontSize: 13 }}>
           {deal.business.phone && <span style={{ color: "var(--text-muted)" }}>📞 {deal.business.phone}</span>}
           {deal.business.address && <span style={{ color: "var(--text-muted)" }}>📍 {deal.business.address}</span>}
-          {deal.business.website && <a href={deal.business.website} target="_blank" rel="noreferrer" style={{ color: "#f97316" }}>🌐 Website</a>}
+          {deal.business.website && <a href={deal.business.website} target="_blank" rel="noreferrer" style={{ color: "#0D9488" }}>🌐 Website</a>}
           {deal.business.tiktok && <a href={deal.business.tiktok} target="_blank" rel="noreferrer" style={{ color: "#ff0050", fontWeight: 700 }}>🎵 TikTok Shop</a>}
           {deal.business.instagram && <span style={{ color: "#E1306C" }}>📸 {deal.business.instagram}</span>}
           {deal.business.facebook && <a href={deal.business.facebook} target="_blank" rel="noreferrer" style={{ color: "#1877F2" }}>📘 Facebook</a>}
@@ -254,7 +254,7 @@ export default function DealPage() {
       {/* Deal card */}
       <div className="card" style={{ padding: 28 }}>
         {deal.featured && (
-          <div style={{ background: "linear-gradient(135deg,#f97316,#8b5cf6)", padding: "6px 16px", margin: "-28px -28px 24px", display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ background: "linear-gradient(135deg,#0D9488,#F43F5E)", padding: "6px 16px", margin: "-28px -28px 24px", display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ fontSize: 11, fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "0.08em" }}>⭐ Featured Deal</span>
           </div>
         )}
@@ -289,9 +289,9 @@ export default function DealPage() {
                 </button>
               </>
             ) : (
-              <div style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", borderRadius: 12, padding: 20, textAlign: "center" }}>
+              <div style={{ background: "rgba(13,148,136,0.08)", border: "1px solid rgba(13,148,136,0.2)", borderRadius: 12, padding: 20, textAlign: "center" }}>
                 <div style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 12 }}>Quote &quot;LocalDeals&quot; when you visit or call to claim your offer:</div>
-                {deal.business.phone && <div style={{ fontSize: 22, fontWeight: 800, color: "#f97316" }}>{deal.business.phone}</div>}
+                {deal.business.phone && <div style={{ fontSize: 22, fontWeight: 800, color: "#0D9488" }}>{deal.business.phone}</div>}
               </div>
             )}
           </div>

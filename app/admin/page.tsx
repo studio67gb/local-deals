@@ -34,7 +34,7 @@ function LoginForm({ onLogin }: { onLogin: () => void }) {
     <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div className="card" style={{ padding: 40, width: "100%", maxWidth: 380 }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 14, background: "linear-gradient(135deg,#f97316,#8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, margin: "0 auto 16px" }}>🔐</div>
+          <div style={{ width: 56, height: 56, borderRadius: 14, background: "linear-gradient(135deg,#0D9488,#F43F5E)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, margin: "0 auto 16px" }}>🔐</div>
           <h1 style={{ fontSize: 22, fontWeight: 800 }}>Admin Login</h1>
           <p style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 6 }}>LocalDeals Dashboard</p>
         </div>
@@ -118,8 +118,8 @@ export default function AdminPage() {
       {stats && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16, marginBottom: 32 }}>
           {[
-            { label: "Active Businesses", value: stats.businesses, icon: "🏪", color: "#f97316" },
-            { label: "Active Deals", value: stats.deals, icon: "🎁", color: "#8b5cf6" },
+            { label: "Active Businesses", value: stats.businesses, icon: "🏪", color: "#0D9488" },
+            { label: "Active Deals", value: stats.deals, icon: "🎁", color: "#F43F5E" },
             { label: "Claims Today", value: stats.claimsToday, icon: "🔥", color: "#4ade80" },
             { label: "Awaiting Approval", value: stats.pending, icon: "⏳", color: stats.pending > 0 ? "#fbbf24" : "#64748b" },
           ].map(s => (
@@ -191,8 +191,8 @@ export default function AdminPage() {
 
       {/* Pending Promo Queue */}
       {pendingPromos.length > 0 && (
-        <div className="card" style={{ overflow: "hidden", marginBottom: 24, borderColor: "rgba(139,92,246,0.3)" }}>
-          <div style={{ padding: "16px 24px", background: "rgba(139,92,246,0.06)", borderBottom: "1px solid rgba(139,92,246,0.15)", display: "flex", alignItems: "center", gap: 10 }}>
+        <div className="card" style={{ overflow: "hidden", marginBottom: 24, borderColor: "rgba(244,63,94,0.3)" }}>
+          <div style={{ padding: "16px 24px", background: "rgba(244,63,94,0.06)", borderBottom: "1px solid rgba(244,63,94,0.15)", display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 16 }}>🚀</span>
             <h2 style={{ fontSize: 15, fontWeight: 800, color: "#a78bfa" }}>Pending Growth Promos ({pendingPromos.length})</h2>
             <span style={{ fontSize: 12, color: "var(--text-dim)", marginLeft: "auto" }}>Review social share links for 1 free month</span>
@@ -261,13 +261,13 @@ export default function AdminPage() {
             </thead>
             <tbody>
               {active.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: "center", padding: 40, color: "var(--text-dim)" }}>No businesses yet. <a href="/admin/businesses/new" style={{ color: "#f97316" }}>Add your first →</a></td></tr>
+                <tr><td colSpan={6} style={{ textAlign: "center", padding: 40, color: "var(--text-dim)" }}>No businesses yet. <a href="/admin/businesses/new" style={{ color: "#0D9488" }}>Add your first →</a></td></tr>
               ) : active.map(b => (
                 <tr key={b.id}>
                   <td><span style={{ fontWeight: 700, color: "var(--text)" }}>{b.name}</span></td>
                   <td><span style={{ color: "var(--text-muted)", fontSize: 13 }}>{b.category}</span></td>
                   <td><span style={{ color: "var(--text-muted)", fontSize: 13 }}>{b.area}</span></td>
-                  <td><span style={{ fontWeight: 700, color: "#f97316" }}>{b._count.deals}</span></td>
+                  <td><span style={{ fontWeight: 700, color: "#0D9488" }}>{b._count.deals}</span></td>
                   <td>
                     <span style={{ fontSize: 12, color: b.address ? "#4ade80" : "#f87171" }}>
                       {b.address ? "✓ Pinned" : "No address"}
@@ -276,7 +276,7 @@ export default function AdminPage() {
                   <td>
                     <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                       <a href={`/admin/businesses/${b.id}`} style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 600, textDecoration: "none" }}>Edit</a>
-                      <a href={`/admin/deals/new?businessId=${b.id}`} style={{ color: "#f97316", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>+ Deal</a>
+                      <a href={`/admin/deals/new?businessId=${b.id}`} style={{ color: "#0D9488", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>+ Deal</a>
                     </div>
                   </td>
                 </tr>

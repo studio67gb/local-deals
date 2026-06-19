@@ -11,7 +11,7 @@ const CATEGORIES = [
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
     <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-      {children}{required && <span style={{ color: '#f97316', marginLeft: 3 }}>*</span>}
+      {children}{required && <span style={{ color: '#0D9488', marginLeft: 3 }}>*</span>}
     </label>
   );
 }
@@ -232,7 +232,7 @@ export default function EditBusinessPage() {
       </form>
 
       {/* Deals Management */}
-      <div className="card" style={{ padding: 28, marginTop: 40, display: 'flex', flexDirection: 'column', gap: 18, borderColor: "rgba(249,115,22,0.3)" }}>
+      <div className="card" style={{ padding: 28, marginTop: 40, display: 'flex', flexDirection: 'column', gap: 18, borderColor: "rgba(13,148,136,0.3)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
           <h2 style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Manage Deals</h2>
           <a href={`/admin/deals/new?businessId=${id}`} className="btn btn-ghost" style={{ fontSize: 12, padding: "6px 12px" }}>+ Add Deal</a>
