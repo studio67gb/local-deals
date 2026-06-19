@@ -8,6 +8,8 @@ interface Business {
   area: string;
   active: boolean;
   status: string;
+  promoStatus: string | null;
+  promoShareUrl: string | null;
   ownerName: string | null;
   ownerEmail: string | null;
   address: string | null;
@@ -81,10 +83,22 @@ export default function AdminPage() {
     setApproving(null);
   };
 
+  const handlePromo = async (id: number, action: "approve" | "reject") => {
+    setApproving(id);
+    await fetch(`/api/admin/promo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ businessId: id, action }),
+    });
+    await load();
+    setApproving(null);
+  };
+
   if (authed === null) return <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }}>Loading...</div>;
   if (!authed) return <LoginForm onLogin={() => { setAuthed(true); load(); }} />;
 
   const pending = businesses.filter(b => b.status === "pending");
+  const pendingPromos = businesses.filter(b => b.promoStatus === "pending");
   const active = businesses.filter(b => b.status === "active");
 
   return (
@@ -160,6 +174,58 @@ export default function AdminPage() {
                         </button>
                         <button
                           onClick={() => handleApprove(b.id, "reject")}
+                          disabled={approving === b.id}
+                          style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", color: "#f87171", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
+                        >
+                          ✕ Reject
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Pending Promo Queue */}
+      {pendingPromos.length > 0 && (
+        <div className="card" style={{ overflow: "hidden", marginBottom: 24, borderColor: "rgba(139,92,246,0.3)" }}>
+          <div style={{ padding: "16px 24px", background: "rgba(139,92,246,0.06)", borderBottom: "1px solid rgba(139,92,246,0.15)", display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 16 }}>🚀</span>
+            <h2 style={{ fontSize: 15, fontWeight: 800, color: "#a78bfa" }}>Pending Growth Promos ({pendingPromos.length})</h2>
+            <span style={{ fontSize: 12, color: "var(--text-dim)", marginLeft: "auto" }}>Review social share links for 1 free month</span>
+          </div>
+          <div style={{ overflowX: "auto" }}>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Business</th>
+                  <th>Share Link</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingPromos.map(b => (
+                  <tr key={b.id}>
+                    <td><span style={{ fontWeight: 700, color: "var(--text)" }}>{b.name}</span></td>
+                    <td>
+                      <a href={b.promoShareUrl!} target="_blank" rel="noopener noreferrer" style={{ color: "#38bdf8", fontSize: 12, fontWeight: 500 }}>
+                        {b.promoShareUrl} ↗
+                      </a>
+                    </td>
+                    <td>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <button
+                          onClick={() => handlePromo(b.id, "approve")}
+                          disabled={approving === b.id}
+                          style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(74,222,128,0.12)", border: "1px solid rgba(74,222,128,0.25)", color: "#4ade80", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
+                        >
+                          {approving === b.id ? "..." : "✓ Approve (1 Mo. Standard)"}
+                        </button>
+                        <button
+                          onClick={() => handlePromo(b.id, "reject")}
                           disabled={approving === b.id}
                           style={{ padding: "6px 14px", borderRadius: 8, background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", color: "#f87171", fontSize: 12, fontWeight: 700, cursor: "pointer" }}
                         >

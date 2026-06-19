@@ -30,6 +30,8 @@ interface Business {
   status: string;
   tier: string;
   stripeCustomerId: string | null;
+  promoShareUrl: string | null;
+  promoStatus: string | null;
   deals: Deal[];
 }
 
@@ -307,6 +309,73 @@ function ProfileTab({ business, onUpdated }: { business: Business; onUpdated: (b
   );
 }
 
+// ─── Growth Hack Promo ────────────────────────────────────────────────────────
+function GrowthPromo({ business, onUpdated }: { business: Business; onUpdated: (updates: Partial<Business>) => void }) {
+  const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  if (business.tier !== "free" && business.promoStatus !== "pending") return null; // Only for free users, unless pending
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const r = await fetch("/api/business/promo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ promoShareUrl: url }),
+    });
+    if (r.ok) {
+      onUpdated({ promoShareUrl: url, promoStatus: "pending" });
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ marginBottom: 28, background: "linear-gradient(135deg, rgba(249,115,22,0.1), rgba(139,92,246,0.1))", border: "1px solid rgba(249,115,22,0.3)", borderRadius: 12, padding: 20 }}>
+      <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+        <div style={{ fontSize: 32 }}>🚀</div>
+        <div style={{ flex: 1 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 4, color: "#f97316" }}>Get 1 Month of Standard Plan for FREE</h3>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 16, lineHeight: 1.5 }}>
+            Share your LocalDeals listing on your Facebook or Instagram page! Paste the link to your post below, and we'll upgrade you to the Standard plan (£5/mo value) free for 30 days!
+          </p>
+
+          {business.promoStatus === "pending" ? (
+            <div style={{ padding: "10px 14px", background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)", borderRadius: 8, fontSize: 13, color: "#fbbf24", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 8 }}>
+              ⏳ Your post is being reviewed! Check back soon.
+            </div>
+          ) : business.promoStatus === "approved" ? (
+            <div style={{ padding: "10px 14px", background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.3)", borderRadius: 8, fontSize: 13, color: "#4ade80", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 8 }}>
+              ✅ Approved! Enjoy your free month.
+            </div>
+          ) : business.promoStatus === "rejected" ? (
+             <div style={{ padding: "10px 14px", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", borderRadius: 8, fontSize: 13, color: "#f87171", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 8 }}>
+              ❌ We couldn't verify your post. Try again?
+            </div>
+          ) : null}
+
+          {(!business.promoStatus || business.promoStatus === "rejected") && (
+            <form onSubmit={submit} style={{ display: "flex", gap: 8 }}>
+              <input 
+                required 
+                type="url" 
+                placeholder="https://facebook.com/your-post" 
+                value={url} 
+                onChange={e => setUrl(e.target.value)} 
+                className="input" 
+                style={{ flex: 1 }} 
+              />
+              <button type="submit" disabled={loading} className="btn btn-primary" style={{ padding: "0 16px" }}>
+                {loading ? "Submitting..." : "Submit Proof →"}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 export default function BusinessDashboard() {
   const router = useRouter();
@@ -359,6 +428,8 @@ export default function BusinessDashboard() {
           <button onClick={logout} className="btn btn-ghost" style={{ fontSize: 13 }}>Log Out</button>
         </div>
       </div>
+
+      <GrowthPromo business={business} onUpdated={(updates) => setBusiness({ ...business, ...updates })} />
 
       {/* Deal Limit Bar */}
       {(() => {

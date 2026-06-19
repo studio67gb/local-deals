@@ -47,6 +47,11 @@ model Business {
   stripeSubId       String?   @unique
   tierExpiresAt     DateTime?
 
+  // Social share promo (1 free month of Standard)
+  promoShareUrl     String?   // URL proof of their social share/like
+  promoStatus       String?   // null | pending | approved | rejected
+  promoApprovedAt   DateTime?
+
   deals       Deal[]
   sessions    BusinessSession[]
 }
