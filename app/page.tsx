@@ -100,10 +100,10 @@ function DealCard({ deal }: { deal: Deal }) {
 function SkeletonCard() {
   return (
     <div className="card" style={{ height: 380, padding: 0, overflow: "hidden" }}>
-      <div style={{ height: 220, width: "100%", background: "rgba(255,255,255,0.06)", animation: "pulse 1.5s ease infinite" }} />
+      <div style={{ height: 220, width: "100%", background: "rgba(0,0,0,0.06)", animation: "pulse 1.5s ease infinite" }} />
       <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
         {[100, 220, 140, 80].map((w, i) => (
-          <div key={i} style={{ height: 14, width: w, borderRadius: 6, background: "rgba(255,255,255,0.06)", animation: "pulse 1.5s ease infinite" }} />
+          <div key={i} style={{ height: 14, width: w, borderRadius: 6, background: "rgba(0,0,0,0.06)", animation: "pulse 1.5s ease infinite" }} />
         ))}
       </div>
     </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
             onClick={handleNearMe}
             disabled={locLoading}
             style={{ 
-              background: lat ? "rgba(244,63,94,0.15)" : "rgba(255,255,255,0.05)",
+              background: lat ? "rgba(244,63,94,0.15)" : "rgba(0,0,0,0.04)",
               border: lat ? "1px solid rgba(244,63,94,0.4)" : "1px solid var(--border)",
               color: lat ? "#F43F5E" : "var(--text)",
               padding: "10px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 
