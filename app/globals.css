@@ -139,7 +139,7 @@ select.input option { background: #1a1a24; }
 
 /* ── Hero gradient text ───────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #0D9488, #F43F5E);
+  background: linear-gradient(135deg, #2DD4BF, #FB7185);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

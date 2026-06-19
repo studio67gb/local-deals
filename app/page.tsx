@@ -223,7 +223,7 @@ export default function HomePage() {
       {/* Deals grid */}
       <section style={{ padding: "0 24px 80px", maxWidth: 1200, margin: "0 auto" }}>
         {loading ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%, 280px),1fr))", gap: 20 }}>
             {[1,2,3,4,5,6].map(i => <SkeletonCard key={i} />)}
           </div>
         ) : deals.length === 0 ? (
@@ -246,7 +246,7 @@ export default function HomePage() {
                   />
 
                 )}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 20, marginBottom: 20 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%, 280px),1fr))", gap: 20, marginBottom: 20 }}>
                   {deals.slice(chunk * 6, chunk * 6 + 6).map(d => <DealCard key={d.id} deal={d} />)}
                 </div>
               </div>
