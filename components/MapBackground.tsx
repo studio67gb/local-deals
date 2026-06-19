@@ -49,7 +49,7 @@ export default function MapBackground() {
   }, [loaded]);
 
   useEffect(() => {
-    if (!loaded || !mapRef.current || businesses.length === 0) return;
+    if (!loaded || !mapRef.current) return;
 
     if (!mapInstanceRef.current) {
       const map = new window.google.maps.Map(mapRef.current, {
@@ -77,22 +77,24 @@ export default function MapBackground() {
 
     const map = mapInstanceRef.current;
 
-    businesses.forEach((b) => {
-      new window.google.maps.Marker({
-        position: { lat: b.lat!, lng: b.lng! },
-        map,
-        icon: {
-          path: window.google.maps.SymbolPath.CIRCLE,
-          scale: 6, // Smaller for background
-          fillColor: "#f97316", // Orange
-          fillOpacity: 0.6,
-          strokeColor: "#ffffff",
-          strokeWeight: 1,
-          strokeOpacity: 0.5
-        },
-        clickable: false,
+    if (businesses.length > 0) {
+      businesses.forEach((b) => {
+        new window.google.maps.Marker({
+          position: { lat: b.lat!, lng: b.lng! },
+          map,
+          icon: {
+            path: window.google.maps.SymbolPath.CIRCLE,
+            scale: 6, // Smaller for background
+            fillColor: "#f97316", // Orange
+            fillOpacity: 0.6,
+            strokeColor: "#ffffff",
+            strokeWeight: 1,
+            strokeOpacity: 0.5
+          },
+          clickable: false,
+        });
       });
-    });
+    }
 
   }, [loaded, businesses]);
 
@@ -110,8 +112,8 @@ export default function MapBackground() {
         style={{ 
           position: "absolute", 
           inset: 0, 
-          // add some blur to make it more abstract
-          filter: "blur(2px) opacity(0.5)", 
+          // Less aggressive blur/opacity so it's visible
+          filter: "blur(1px) opacity(0.8)", 
           transform: "scale(1.05)" // prevent blur bleeding edges
         }} 
       />
@@ -119,7 +121,7 @@ export default function MapBackground() {
       <div style={{
         position: "absolute",
         inset: 0,
-        background: "radial-gradient(circle at center, transparent 0%, var(--bg) 80%), linear-gradient(to bottom, transparent 0%, var(--bg) 100%)",
+        background: "radial-gradient(ellipse at center, transparent 0%, var(--bg) 95%), linear-gradient(to bottom, transparent 40%, var(--bg) 100%)",
       }} />
     </div>
   );
