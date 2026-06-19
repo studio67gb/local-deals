@@ -102,7 +102,7 @@ export default function MapBackground() {
     <div style={{
       position: "absolute",
       inset: 0,
-      zIndex: -1,
+      zIndex: 0,
       pointerEvents: "none",
       overflow: "hidden"
     }}>
