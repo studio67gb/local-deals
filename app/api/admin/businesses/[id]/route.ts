@@ -14,7 +14,7 @@ export async function GET(
   const id = parseInt(rawId);
   const business = await prisma.business.findUnique({ 
     where: { id },
-    include: { deals: { orderBy: { createdAt: 'desc' } } }
+    include: { deals: { orderBy: { createdAt: 'desc' }, include: { blogPosts: { select: { id: true, title: true, slug: true } } } } }
   });
   
   if (!business) return NextResponse.json({ error: "Not found" }, { status: 404 });

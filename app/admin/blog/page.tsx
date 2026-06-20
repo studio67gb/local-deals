@@ -266,8 +266,11 @@ function AdminBlogPage() {
             </div>
           </form>
         </div>
-      ) : (
-        <div className="card" style={{ overflow: "hidden" }}>
+      )}
+
+      {/* Blog Posts List */}
+      {posts.length > 0 && (
+        <div className="card" style={{ overflow: "hidden", marginTop: showForm ? 40 : 0 }}>
           <table className="admin-table">
             <thead>
               <tr>

@@ -256,24 +256,49 @@ export default function EditBusinessPage() {
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {deals.map(deal => (
-              <div key={deal.id} style={{ padding: 16, background: "rgba(255,255,255,0.03)", borderRadius: 12, border: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
-                <div>
-                  <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 4 }}>{deal.title}</div>
-                  <div style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 8 }}>{deal.description}</div>
-                  <div style={{ display: "flex", gap: 12, fontSize: 11, color: "var(--text-muted)", fontWeight: 700 }}>
-                    <span style={{ color: deal.active ? "#4ade80" : "#fbbf24" }}>{deal.active ? "● Live" : "● Pending"}</span>
-                    <span>🔥 {deal.claimCount} claims</span>
-                    {deal.offerCode && <span>🎟️ {deal.offerCode}</span>}
+              <div key={deal.id} style={{ display: "flex", flexDirection: "column", gap: 0, background: "rgba(255,255,255,0.03)", borderRadius: 12, border: "1px solid var(--border)", overflow: "hidden" }}>
+                <div style={{ padding: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: 15, marginBottom: 4 }}>{deal.title}</div>
+                    <div style={{ fontSize: 12, color: "var(--text-dim)", marginBottom: 8 }}>{deal.description}</div>
+                    <div style={{ display: "flex", gap: 12, fontSize: 11, color: "var(--text-muted)", fontWeight: 700 }}>
+                      <span style={{ color: deal.active ? "#4ade80" : "#fbbf24" }}>{deal.active ? "● Live" : "● Pending"}</span>
+                      <span>🔥 {deal.claimCount} claims</span>
+                      {deal.offerCode && <span>🎟️ {deal.offerCode}</span>}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: 8, flexDirection: "column", alignItems: "flex-end" }}>
+                    <a href={`/admin/blog?businessId=${id}&dealId=${deal.id}`} className="btn btn-primary" style={{ padding: "6px 12px", fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>
+                      ✍️ Write Blog
+                    </a>
+                    <button onClick={() => deleteDeal(deal.id)} style={{ padding: "6px 12px", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8, color: "#f87171", fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+                      Delete Deal
+                    </button>
                   </div>
                 </div>
-                <div style={{ display: "flex", gap: 8, flexDirection: "column", alignItems: "flex-end" }}>
-                  <a href={`/admin/blog?businessId=${id}&dealId=${deal.id}`} className="btn btn-primary" style={{ padding: "6px 12px", fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>
-                    ✍️ Write Blog
-                  </a>
-                  <button onClick={() => deleteDeal(deal.id)} style={{ padding: "6px 12px", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8, color: "#f87171", fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
-                    Delete
-                  </button>
-                </div>
+                {/* Related Blogs */}
+                {deal.blogPosts && deal.blogPosts.length > 0 && (
+                  <div style={{ padding: "12px 16px", background: "rgba(0,0,0,0.3)", borderTop: "1px solid var(--border)" }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Attached Blogs</div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {deal.blogPosts.map((bp: any) => (
+                        <div key={bp.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13 }}>
+                          <span style={{ color: "var(--text)" }}>📰 {bp.title}</span>
+                          <div style={{ display: "flex", gap: 12 }}>
+                            <a href={`/blog/${bp.slug}`} target="_blank" rel="noopener noreferrer" style={{ color: "#38bdf8", textDecoration: "none", fontWeight: 600 }}>View ↗</a>
+                            <button onClick={async () => {
+                              if (!confirm("Delete this blog post?")) return;
+                              const r = await fetch(`/api/admin/blog?id=${bp.id}`, { method: 'DELETE' });
+                              if (r.ok) {
+                                setDeals(deals.map(d => d.id === deal.id ? { ...d, blogPosts: d.blogPosts.filter((b: any) => b.id !== bp.id) } : d));
+                              }
+                            }} style={{ background: "none", border: "none", padding: 0, color: "#f87171", cursor: "pointer", fontWeight: 600 }}>Delete</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
