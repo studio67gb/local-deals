@@ -13,6 +13,7 @@ interface Business {
   ownerName: string | null;
   ownerEmail: string | null;
   address: string | null;
+  tier: string;
   _count: { deals: number };
 }
 interface Stats { businesses: number; deals: number; claimsToday: number; pending: number; }
@@ -92,6 +93,16 @@ export default function AdminPage() {
     });
     await load();
     setApproving(null);
+  };
+
+  const handleDelete = async (id: number, name: string) => {
+    if (!confirm(`CRITICAL WARNING: Are you sure you want to completely delete "${name}" and all of its deals? This cannot be undone.`)) return;
+    const r = await fetch(`/api/admin/businesses/${id}`, { method: 'DELETE' });
+    if (r.ok) {
+      await load();
+    } else {
+      alert("Failed to delete business");
+    }
   };
 
   if (authed === null) return <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }}>Loading...</div>;
@@ -252,6 +263,7 @@ export default function AdminPage() {
             <thead>
               <tr>
                 <th>Business</th>
+                <th>Plan</th>
                 <th>Category</th>
                 <th>Area</th>
                 <th>Deals</th>
@@ -263,8 +275,17 @@ export default function AdminPage() {
               {active.length === 0 ? (
                 <tr><td colSpan={6} style={{ textAlign: "center", padding: 40, color: "var(--text-dim)" }}>No businesses yet. <a href="/admin/businesses/new" style={{ color: "#0D9488" }}>Add your first →</a></td></tr>
               ) : active.map(b => (
-                <tr key={b.id}>
+                <tr key={b.id} style={b.tier && b.tier !== 'free' ? { background: "rgba(13,148,136,0.03)" } : {}}>
                   <td><span style={{ fontWeight: 700, color: "var(--text)" }}>{b.name}</span></td>
+                  <td>
+                    {b.tier && b.tier !== 'free' ? (
+                      <span style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", padding: "3px 8px", borderRadius: 6, background: "rgba(13,148,136,0.15)", color: "#0D9488", border: "1px solid rgba(13,148,136,0.3)" }}>
+                        {b.tier}
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Free</span>
+                    )}
+                  </td>
                   <td><span style={{ color: "var(--text-muted)", fontSize: 13 }}>{b.category}</span></td>
                   <td><span style={{ color: "var(--text-muted)", fontSize: 13 }}>{b.area}</span></td>
                   <td><span style={{ fontWeight: 700, color: "#0D9488" }}>{b._count.deals}</span></td>
@@ -277,6 +298,7 @@ export default function AdminPage() {
                     <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                       <a href={`/admin/businesses/${b.id}`} style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 600, textDecoration: "none" }}>Edit</a>
                       <a href={`/admin/deals/new?businessId=${b.id}`} style={{ color: "#0D9488", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>+ Deal</a>
+                      <button onClick={() => handleDelete(b.id, b.name)} style={{ background: "none", border: "none", padding: 0, color: "#f87171", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Delete</button>
                     </div>
                   </td>
                 </tr>
