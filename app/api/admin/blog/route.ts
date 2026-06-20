@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { requireAdmin } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
-    const cookieStore = await cookies();
-    if (cookieStore.get("admin_auth")?.value !== "true") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const denied = await requireAdmin(req as any);
+    if (denied) return denied;
 
     const { title, slug, content, excerpt, imageUrl, author, businessIds, dealIds } = await req.json();
 
@@ -34,10 +32,8 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const cookieStore = await cookies();
-    if (cookieStore.get("admin_auth")?.value !== "true") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const denied = await requireAdmin(req as any);
+    if (denied) return denied;
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");

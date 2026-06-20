@@ -1,12 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
+import { requireAdmin } from "@/lib/auth";
 
-export async function GET() {
-  const cookieStore = await cookies();
-  if (cookieStore.get("admin_auth")?.value !== "true") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+export async function GET(req: NextRequest) {
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
 
   try {
     const businesses = await prisma.business.findMany({
