@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface BlogPost {
   id: number;
@@ -16,11 +16,15 @@ interface BizOption {
   deals: { id: number; title: string; active: boolean }[];
 }
 
-export default function AdminBlogPage() {
+function AdminBlogPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initBizId = searchParams.get("businessId");
+  const initDealId = searchParams.get("dealId");
+
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(!!initBizId || !!initDealId);
   const [businesses, setBusinesses] = useState<BizOption[]>([]);
 
   const [form, setForm] = useState({
@@ -30,8 +34,8 @@ export default function AdminBlogPage() {
     excerpt: "",
     imageUrl: "",
     author: "Local Deals UK",
-    businessIds: [] as string[],
-    dealIds: [] as string[]
+    businessIds: initBizId ? [initBizId] : [] as string[],
+    dealIds: initDealId ? [initDealId] : [] as string[]
   });
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -299,5 +303,13 @@ export default function AdminBlogPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminBlogPageWrapper() {
+  return (
+    <Suspense fallback={<div style={{ textAlign: "center", padding: 80, color: "var(--text-muted)" }}>Loading Blog Manager...</div>}>
+      <AdminBlogPage />
+    </Suspense>
   );
 }

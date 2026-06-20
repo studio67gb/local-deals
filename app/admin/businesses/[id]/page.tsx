@@ -266,9 +266,14 @@ export default function EditBusinessPage() {
                     {deal.offerCode && <span>🎟️ {deal.offerCode}</span>}
                   </div>
                 </div>
-                <button onClick={() => deleteDeal(deal.id)} style={{ padding: "6px 12px", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8, color: "#f87171", fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
-                  Delete
-                </button>
+                <div style={{ display: "flex", gap: 8, flexDirection: "column", alignItems: "flex-end" }}>
+                  <a href={`/admin/blog?businessId=${id}&dealId=${deal.id}`} className="btn btn-primary" style={{ padding: "6px 12px", fontSize: 11, fontWeight: 700, whiteSpace: "nowrap" }}>
+                    ✍️ Write Blog
+                  </a>
+                  <button onClick={() => deleteDeal(deal.id)} style={{ padding: "6px 12px", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8, color: "#f87171", fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>
