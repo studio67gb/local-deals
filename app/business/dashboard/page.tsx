@@ -12,6 +12,7 @@ interface Deal {
   expiresAt: string | null;
   claimCount: number;
   active: boolean;
+  imageUrl: string | null;
 }
 interface Business {
   id: number;
