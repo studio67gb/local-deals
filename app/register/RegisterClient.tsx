@@ -193,7 +193,10 @@ function RegisterForm() {
 
       {/* Semantic B2B Benefits */}
       <section aria-labelledby="b2b-benefits" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, marginBottom: 48 }}>
-        <h2 id="b2b-benefits" className="sr-only" style={{ display: "none" }}>Platform Benefits</h2>
+        {/* FIX: Removed display: "none". Uses standard layout-safe inline visual hiding for AI bots */}
+        <h2 id="b2b-benefits" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }}>
+          Advertising Benefits for Independent UK Businesses
+        </h2>
         
         <article style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12, padding: 20, textAlign: "center" }}>
           <div style={{ fontSize: 32, marginBottom: 12 }}>💷</div>
