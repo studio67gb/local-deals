@@ -70,6 +70,8 @@ export default function MapPage() {
         { elementType: "labels.text.fill", stylers: [{ color: "#94a3b8" }] },
         { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a2a3a" }] },
         { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+        { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+        { featureType: "road.highway", elementType: "labels", stylers: [{ visibility: "off" }] },
         { featureType: "water", elementType: "geometry", stylers: [{ color: "#0f1923" }] },
         { featureType: "poi", stylers: [{ visibility: "off" }] },
         { featureType: "transit", stylers: [{ visibility: "off" }] },
