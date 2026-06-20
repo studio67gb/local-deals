@@ -272,9 +272,9 @@ export default function DealClient() {
 
       {/* Deal card */}
       <div className="card" style={{ padding: 28, overflow: "hidden" }}>
-        {deal.imageUrl && (
-          <div style={{ margin: "-28px -28px 24px -28px", height: 260, position: "relative" }}>
-            <img src={deal.imageUrl} alt={deal.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        {(deal.imageUrl || deal.business.logo) && (
+          <div style={{ margin: "-28px -28px 24px -28px", height: 260, position: "relative", background: "rgba(255,255,255,0.02)" }}>
+            <img src={deal.imageUrl || deal.business.logo!} alt={deal.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
         )}
 

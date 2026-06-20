@@ -204,6 +204,7 @@ function CreateDealForm({ onSaved }: { onSaved: (d: Deal) => void }) {
     offerCode: "", terms: "",
     expiresAt: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -211,15 +212,44 @@ function CreateDealForm({ onSaved }: { onSaved: (d: Deal) => void }) {
     e.preventDefault();
     setLoading(true);
     setError("");
+    
+    // 1. Create deal
     const r = await fetch("/api/business/deals", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-    if (r.ok) { onSaved(await r.json()); }
-    else { const d = await r.json(); setError(d.error || "Failed to create deal"); }
+    if (!r.ok) { 
+      const d = await r.json(); 
+      setError(d.error || "Failed to create deal"); 
+      setLoading(false);
+      return;
+    }
+    
+    let newDeal = await r.json();
+
+    // 2. Upload image if selected
+    if (imageFile) {
+      const fd = new FormData();
+      fd.append("image", imageFile);
+      const imgRes = await fetch(`/api/business/deals/${newDeal.id}/upload-image`, { method: "POST", body: fd });
+      if (imgRes.ok) {
+        const { imageUrl } = await imgRes.json();
+        newDeal = { ...newDeal, imageUrl };
+      }
+    }
+
+    onSaved(newDeal);
     setLoading(false);
   };
 
   return (
     <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {error && <div style={{ color: "#f87171", fontSize: 13, background: "rgba(248,113,113,0.1)", padding: 12, borderRadius: 8 }}>{error}</div>}
+      
+      <div style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed var(--border)", borderRadius: 12, padding: 20 }}>
+        <label style={{ display: "block", fontSize: 13, fontWeight: 800, color: "var(--text)", marginBottom: 6 }}>Deal Image (Optional)</label>
+        <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 0, marginBottom: 12 }}>Upload an eye-catching photo. We will use your business logo if you skip this.</p>
+        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setImageFile(e.target.files?.[0] || null)} style={{ fontSize: 13, color: "var(--text-dim)" }} />
+        {imageFile && <div style={{ marginTop: 12, fontSize: 12, color: "#0D9488", fontWeight: 700 }}>✅ Selected: {imageFile.name}</div>}
+      </div>
+
       {[
         { label: "Offer Headline", key: "title", type: "text", required: true },
       ].map(f => (

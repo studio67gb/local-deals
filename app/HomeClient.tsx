@@ -37,7 +37,7 @@ const PILL_MAP: Record<string, string> = {
 };
 
 function DealCard({ deal }: { deal: Deal }) {
-  const imgUrl = deal.imageUrl || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop";
+  const imgUrl = deal.imageUrl || deal.business?.logo || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop";
 
   return (
     <Link href={`/deal/${deal.id}`} style={{ textDecoration: "none" }}>
