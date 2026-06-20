@@ -26,6 +26,7 @@ export default function Navbar() {
       {/* Desktop Menu */}
       <div className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
         <Link href="/map" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</Link>
+        <Link href="/blog" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>📰 Blog</Link>
         <Link href="/pricing" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>💰 Pricing</Link>
         <Link href="/about" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>About</Link>
         <Link href="/business/login" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>Business Login</Link>
@@ -53,6 +54,7 @@ export default function Navbar() {
           boxShadow: "0 10px 30px rgba(0,0,0,0.5)"
         }}>
           <Link href="/map" onClick={() => setIsOpen(false)} style={{ color: "#cbd5e1", fontSize: 16, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</Link>
+          <Link href="/blog" onClick={() => setIsOpen(false)} style={{ color: "#cbd5e1", fontSize: 16, textDecoration: "none", fontWeight: 500 }}>📰 Blog</Link>
           <Link href="/pricing" onClick={() => setIsOpen(false)} style={{ color: "#cbd5e1", fontSize: 16, textDecoration: "none", fontWeight: 500 }}>💰 Pricing</Link>
           <Link href="/about" onClick={() => setIsOpen(false)} style={{ color: "#cbd5e1", fontSize: 16, textDecoration: "none", fontWeight: 500 }}>About</Link>
           <Link href="/business/login" onClick={() => setIsOpen(false)} style={{ color: "#cbd5e1", fontSize: 16, textDecoration: "none", fontWeight: 500 }}>Business Login</Link>
