@@ -1,18 +1,31 @@
-import { Metadata } from "next";
-import { prisma } from "@/lib/db";
+"use client";
+import { useState, useEffect } from "react";
 
-export const metadata: Metadata = {
-  title: "Blog — Local Deals UK",
-  description: "Read the latest news, tips, and highlights from independent businesses in your area.",
-};
+interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  imageUrl: string | null;
+  author: string;
+  published: boolean;
+  createdAt: string;
+}
 
-export const dynamic = 'force-dynamic';
+export default function BlogIndexPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function BlogIndexPage() {
-  const posts = await prisma.blogPost.findMany({
-    where: { published: true },
-    orderBy: { createdAt: 'desc' }
-  });
+  useEffect(() => {
+    fetch("/api/blog", { cache: 'no-store' })
+      .then(r => r.json())
+      .then(data => {
+        setPosts(data.posts || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 24px 80px" }}>
@@ -21,14 +34,18 @@ export default async function BlogIndexPage() {
         <p style={{ fontSize: 18, color: "var(--text-muted)" }}>News, tips, and stories from independent UK businesses.</p>
       </header>
 
-      {posts.length === 0 ? (
+      {loading ? (
+        <div style={{ textAlign: "center", padding: 80, color: "var(--text-dim)" }}>
+          Loading posts...
+        </div>
+      ) : posts.length === 0 ? (
         <div style={{ textAlign: "center", padding: 80, color: "var(--text-dim)" }}>
           No posts published yet. Check back soon!
         </div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
           {posts.map(post => (
-            <a key={post.id} href={`/blog/${post.slug}`} className="card" style={{ display: "flex", flexDirection: "column", textDecoration: "none", overflow: "hidden", transition: "transform 0.2s" }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
+            <a key={post.id} href={`/blog/${post.slug}`} className="card" style={{ display: "flex", flexDirection: "column", textDecoration: "none", overflow: "hidden", transition: "transform 0.2s" }}>
               {post.imageUrl ? (
                 <div style={{ height: 180, width: "100%", background: "var(--bg-elevated)", borderBottom: "1px solid var(--border)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
