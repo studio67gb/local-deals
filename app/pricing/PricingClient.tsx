@@ -65,6 +65,7 @@ const TIERS = [
     cta: "Go Featured — £15/mo",
     color: "#f97316", // Orange
     popular: false,
+    bestValue: true,
   },
 ];
 
@@ -113,17 +114,27 @@ export default function PricingClient() {
           <div key={t.key} className="card" style={{
             padding: 0,
             position: "relative",
-            border: t.popular ? "2px solid rgba(13,148,136,0.5)" : undefined,
-            transform: t.popular ? "scale(1.04)" : undefined,
-            zIndex: t.popular ? 1 : 0,
+            border: t.popular || t.bestValue ? `2px solid ${t.color}` : undefined,
+            transform: t.popular || t.bestValue ? "scale(1.04)" : undefined,
+            zIndex: t.popular || t.bestValue ? 1 : 0,
+            overflow: "visible",
           }}>
             {t.popular && (
               <div style={{
                 position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
-                background: "linear-gradient(135deg, #0D9488, #f97316)",
+                background: "linear-gradient(135deg, #0D9488, #059669)",
                 color: "white", fontSize: 11, fontWeight: 800, textTransform: "uppercase",
                 letterSpacing: "0.06em", padding: "5px 18px", borderRadius: 999,
               }}>Most Popular</div>
+            )}
+            
+            {t.bestValue && (
+              <div style={{
+                position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
+                background: "linear-gradient(135deg, #f97316, #ea580c)",
+                color: "white", fontSize: 11, fontWeight: 800, textTransform: "uppercase",
+                letterSpacing: "0.06em", padding: "5px 18px", borderRadius: 999,
+              }}>Best Value</div>
             )}
 
             <div style={{ padding: "36px 28px 28px" }}>
