@@ -178,33 +178,41 @@ function RegisterForm() {
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 80px" }}>
-      {/* Hero */}
-      <div style={{ textAlign: "center", marginBottom: 48 }}>
+      {/* SEO-Optimized B2B Hero */}
+      <header style={{ textAlign: "center", marginBottom: 48 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `rgba(${selectedPlan === "featured" ? "244,63,94" : "13,148,136"},0.1)`, border: `1px solid rgba(${selectedPlan === "featured" ? "244,63,94" : "13,148,136"},0.2)`, borderRadius: 999, padding: "6px 16px", marginBottom: 20 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: PLAN_COLORS[selectedPlan] || "#0D9488", textTransform: "uppercase", letterSpacing: "0.06em" }}>🏪 {PLAN_LABELS[selectedPlan] || "Free to Join"}</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: PLAN_COLORS[selectedPlan] || "#0D9488", textTransform: "uppercase", letterSpacing: "0.06em" }}>🏪 {PLAN_LABELS[selectedPlan] || "B2B Advertising Platform"}</span>
         </div>
-        <h1 style={{ fontSize: 36, fontWeight: 900, lineHeight: 1.1, marginBottom: 12 }}>
-          List Your Business on<br /><span className="gradient-text">LocalDeals</span>
+        <h1 style={{ fontSize: 38, fontWeight: 900, lineHeight: 1.2, marginBottom: 16 }}>
+          Advertise Your Independent UK Business on <span className="gradient-text">LocalDeals</span>
         </h1>
-        <p style={{ fontSize: 16, color: "var(--text-muted)", lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
-          Reach thousands of local customers actively looking for deals near them. Free to list, no commission, no contracts.
+        <p style={{ fontSize: 18, color: "var(--text-muted)", lineHeight: 1.6, maxWidth: 600, margin: "0 auto", marginBottom: 32 }}>
+          The premier platform for independent UK businesses to list local promotions, drive foot traffic on quiet weekdays, and connect with high-intent nearby customers.
         </p>
-      </div>
+      </header>
 
-      {/* Benefits */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 40 }}>
-        {[
-          { icon: "🆓", title: "Free Listing", desc: "No cost to join or list your offer" },
-          { icon: "📍", title: "Map Visibility", desc: "Pinned on our nationwide deals map" },
-          { icon: "📊", title: "Claim Tracking", desc: "See how many people claimed your deal" },
-        ].map(b => (
-          <div key={b.title} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12, padding: 16, textAlign: "center" }}>
-            <div style={{ fontSize: 28, marginBottom: 8 }}>{b.icon}</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 4 }}>{b.title}</div>
-            <div style={{ fontSize: 11, color: "var(--text-dim)" }}>{b.desc}</div>
-          </div>
-        ))}
-      </div>
+      {/* Semantic B2B Benefits */}
+      <section aria-labelledby="b2b-benefits" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, marginBottom: 48 }}>
+        <h2 id="b2b-benefits" className="sr-only" style={{ display: "none" }}>Platform Benefits</h2>
+        
+        <article style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12, padding: 20, textAlign: "center" }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>💷</div>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 8 }}>Zero Upfront Costs</h3>
+          <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.5 }}>Start for free or upgrade to our highly competitive subscription pricing. No hidden fees or commissions on your deals.</p>
+        </article>
+
+        <article style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12, padding: 20, textAlign: "center" }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>🚶</div>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 8 }}>Drive Foot Traffic</h3>
+          <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.5 }}>Turn quiet weekdays into busy trading days. Target locals precisely when your shop or restaurant needs them most.</p>
+        </article>
+
+        <article style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: 12, padding: 20, textAlign: "center" }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>📈</div>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--text)", marginBottom: 8 }}>Lead Generation</h3>
+          <p style={{ fontSize: 13, color: "var(--text-dim)", lineHeight: 1.5 }}>A prominent listing acts as a 24/7 lead engine. Track clicks, deal claims, and engagement straight from your dashboard.</p>
+        </article>
+      </section>
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {/* Your Details */}
