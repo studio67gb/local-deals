@@ -30,8 +30,8 @@ export default function AdminBlogPage() {
     excerpt: "",
     imageUrl: "",
     author: "Local Deals UK",
-    businessId: "",
-    dealId: ""
+    businessIds: [] as string[],
+    dealIds: [] as string[]
   });
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -100,7 +100,7 @@ export default function AdminBlogPage() {
       
       if (res.ok) {
         setShowForm(false);
-        setForm({ title: "", slug: "", content: "", excerpt: "", imageUrl: "", author: "Local Deals UK", businessId: "", dealId: "" });
+        setForm({ title: "", slug: "", content: "", excerpt: "", imageUrl: "", author: "Local Deals UK", businessIds: [], dealIds: [] });
         loadPosts();
       } else {
         const data = await res.json();
@@ -176,20 +176,59 @@ export default function AdminBlogPage() {
             </div>
 
             <div>
-              <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Tag a Local Business (Optional)</label>
-              <select className="input" value={form.businessId} onChange={e => setForm({ ...form, businessId: e.target.value, dealId: "" })}>
-                <option value="">-- No Business Tagged --</option>
+              <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Tag Local Businesses</label>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                {form.businessIds.map(id => {
+                  const b = businesses.find(bz => bz.id.toString() === id);
+                  return b ? (
+                    <div key={id} style={{ padding: "4px 12px", background: "rgba(13,148,136,0.15)", border: "1px solid rgba(13,148,136,0.3)", borderRadius: 99, fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                      {b.name}
+                      <button type="button" onClick={() => setForm({...form, businessIds: form.businessIds.filter(i => i !== id)})} style={{ background: "none", border: "none", color: "#0D9488", cursor: "pointer", padding: 0 }}>✕</button>
+                    </div>
+                  ) : null;
+                })}
+              </div>
+              <select className="input" value="" onChange={e => {
+                if (e.target.value && !form.businessIds.includes(e.target.value)) {
+                  setForm({ ...form, businessIds: [...form.businessIds, e.target.value] });
+                }
+              }}>
+                <option value="">+ Add Business Tag...</option>
                 {businesses.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
               </select>
             </div>
 
-            {form.businessId && (
+            {form.businessIds.length > 0 && (
               <div>
-                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Tag a Specific Deal (Optional)</label>
-                <select className="input" value={form.dealId} onChange={e => setForm({ ...form, dealId: e.target.value })}>
-                  <option value="">-- Highlight Business Only --</option>
-                  {businesses.find(b => b.id.toString() === form.businessId)?.deals.map(d => (
-                    <option key={d.id} value={d.id}>{d.title} {d.active ? "" : "(Inactive)"}</option>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Tag Specific Deals</label>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                  {form.dealIds.map(id => {
+                    // Find deal across all businesses
+                    let dTitle = id;
+                    for (const bz of businesses) {
+                      const dl = bz.deals.find(d => d.id.toString() === id);
+                      if (dl) { dTitle = dl.title; break; }
+                    }
+                    return (
+                      <div key={id} style={{ padding: "4px 12px", background: "rgba(244,63,94,0.15)", border: "1px solid rgba(244,63,94,0.3)", borderRadius: 99, fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                        {dTitle}
+                        <button type="button" onClick={() => setForm({...form, dealIds: form.dealIds.filter(i => i !== id)})} style={{ background: "none", border: "none", color: "#F43F5E", cursor: "pointer", padding: 0 }}>✕</button>
+                      </div>
+                    );
+                  })}
+                </div>
+                <select className="input" value="" onChange={e => {
+                  if (e.target.value && !form.dealIds.includes(e.target.value)) {
+                    setForm({ ...form, dealIds: [...form.dealIds, e.target.value] });
+                  }
+                }}>
+                  <option value="">+ Add Deal Tag...</option>
+                  {businesses.filter(b => form.businessIds.includes(b.id.toString())).map(b => (
+                    <optgroup key={b.id} label={b.name}>
+                      {b.deals.map(d => (
+                        <option key={d.id} value={d.id}>{d.title} {d.active ? "" : "(Inactive)"}</option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </div>

@@ -54,7 +54,7 @@ model Business {
 
   deals       Deal[]
   sessions    BusinessSession[]
-  blogPosts   BlogPost[]
+  blogPosts   BlogPost[]        @relation("BlogBusinesses")
 }
 
 model BusinessSession {
@@ -85,7 +85,7 @@ model Deal {
   reviewCount Int?
 
   claims      Claim[]
-  blogPosts   BlogPost[]
+  blogPosts   BlogPost[] @relation("BlogDeals")
 }
 
 model Claim {
@@ -108,10 +108,7 @@ model BlogPost {
   author    String   @default("Local Deals UK")
   published Boolean  @default(true)
 
-  // Optional relations for tagging local businesses and deals
-  businessId Int?
-  business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
-  
-  dealId     Int?
-  deal       Deal?     @relation(fields: [dealId], references: [id], onDelete: SetNull)
+  // Many-to-many relations for listicles (e.g., Top 5 Shops)
+  businesses Business[] @relation("BlogBusinesses")
+  deals      Deal[]     @relation("BlogDeals")
 }

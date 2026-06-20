@@ -26,8 +26,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await prisma.blogPost.findUnique({ 
     where: { slug },
     include: {
-      business: true,
-      deal: true
+      businesses: true,
+      deals: { include: { business: true } } // include business for deals to show where it's at
     }
   });
 
@@ -56,13 +56,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       }
     },
     "articleBody": post.content.replace(/<[^>]*>?/gm, ''), // Stripped HTML for pure text schema
-    ...(post.business && {
-      "about": {
+    ...(post.businesses.length > 0 && {
+      "about": post.businesses.map(b => ({
         "@type": "LocalBusiness",
-        "name": post.business.name,
-        "image": post.business.logo,
-        "address": post.business.address
-      }
+        "name": b.name,
+        "image": b.logo,
+        "address": b.address
+      }))
     })
   };
 
@@ -96,23 +96,36 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: post.content }} 
       />
 
-      {/* Highlighted Tagged Business/Deal */}
-      {(post.business || post.deal) && (
-        <div style={{ marginTop: 48, padding: 32, borderRadius: 16, background: "linear-gradient(135deg, rgba(13,148,136,0.1), rgba(244,63,94,0.1))", border: "1px solid rgba(255,255,255,0.1)" }}>
-          <div style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", color: "#0D9488", marginBottom: 12, letterSpacing: 1 }}>Featured Local Business</div>
-          {post.deal ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <h3 style={{ fontSize: 24, fontWeight: 800 }}>{post.deal.title}</h3>
-              <p style={{ color: "var(--text-dim)" }}>Available at <strong>{post.business?.name}</strong></p>
-              <a href={`/deal/${post.deal.id}`} className="btn btn-primary" style={{ alignSelf: "flex-start", marginTop: 8 }}>View Deal & Claim</a>
-            </div>
-          ) : post.business && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <h3 style={{ fontSize: 24, fontWeight: 800 }}>{post.business.name}</h3>
-              <p style={{ color: "var(--text-dim)" }}>{post.business.description}</p>
-              <a href={`/deal?business=${post.business.id}`} className="btn btn-orange" style={{ alignSelf: "flex-start", marginTop: 8 }}>View Business Profile</a>
-            </div>
-          )}
+      {/* Highlighted Tagged Deals */}
+      {post.deals.length > 0 && (
+        <div style={{ marginTop: 64 }}>
+          <h2 style={{ fontSize: 24, fontWeight: 900, marginBottom: 24, textAlign: "center" }}>Featured Deals</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr))", gap: 20 }}>
+            {post.deals.map(deal => (
+              <div key={deal.id} style={{ padding: 24, borderRadius: 16, background: "linear-gradient(135deg, rgba(13,148,136,0.1), rgba(244,63,94,0.1))", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: "#0D9488", marginBottom: 8, letterSpacing: 1 }}>Exclusive Deal</div>
+                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>{deal.title}</h3>
+                <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16, flex: 1 }}>Available at <strong>{deal.business.name}</strong></p>
+                <a href={`/deal/${deal.id}`} className="btn btn-primary" style={{ justifyContent: "center" }}>View Deal & Claim</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Highlighted Tagged Businesses (that don't have a specific deal tagged) */}
+      {post.businesses.length > 0 && (
+        <div style={{ marginTop: post.deals.length > 0 ? 32 : 64 }}>
+          <h2 style={{ fontSize: 24, fontWeight: 900, marginBottom: 24, textAlign: "center" }}>Featured Businesses</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr))", gap: 20 }}>
+            {post.businesses.map(biz => (
+              <div key={biz.id} style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", display: "flex", flexDirection: "column" }}>
+                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>{biz.name}</h3>
+                <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16, flex: 1 }}>{biz.description?.substring(0,80)}...</p>
+                <a href={`/deal?business=${biz.id}`} className="btn btn-orange" style={{ justifyContent: "center" }}>View Profile</a>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
