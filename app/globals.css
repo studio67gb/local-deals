@@ -5,9 +5,9 @@
   --bg-card:      #111827;  /* Midnight Slate (logo text / accents) */
   --bg-card2:     #1F2937;
   --border:       rgba(255,255,255,0.06);
-  --text:         #F9FAFB;
-  --text-muted:   #9CA3AF;
-  --text-dim:     #6B7280;
+  --text:         #FFFFFF;
+  --text-muted:   #D1D5DB;
+  --text-dim:     #9CA3AF;
   
   --brand:        #16A34A;  /* Savings Green */
   --brand-light:  #22C55E;
