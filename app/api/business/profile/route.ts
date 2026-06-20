@@ -46,3 +46,14 @@ export async function PATCH(req: NextRequest) {
   const { ownerPassword: _, ...safe } = updated as typeof updated & { ownerPassword?: string };
   return NextResponse.json(safe);
 }
+
+export async function DELETE(req: NextRequest) {
+  const session = await getBusinessSession(req);
+  if (!session) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+
+  await prisma.business.delete({ where: { id: session.businessId } }).catch(() => {});
+  
+  const res = NextResponse.json({ ok: true });
+  res.cookies.delete("biz_session");
+  return res;
+}

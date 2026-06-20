@@ -323,6 +323,18 @@ function ProfileTab({ business, onUpdated }: { business: Business; onUpdated: (b
     setSaving(false);
   };
 
+  const deleteProfile = async () => {
+    if (!confirm("CRITICAL WARNING: Are you sure you want to completely delete your business profile and all of your deals? This cannot be undone.")) return;
+    setSaving(true);
+    const r = await fetch("/api/business/profile", { method: "DELETE" });
+    if (r.ok) {
+      window.location.href = "/register";
+    } else {
+      alert("Failed to delete profile");
+      setSaving(false);
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
 
@@ -413,9 +425,14 @@ function ProfileTab({ business, onUpdated }: { business: Business; onUpdated: (b
           ))}
         </div>
 
-        <button className="btn btn-primary" type="submit" disabled={saving} style={{ justifyContent: "center" }}>
-          {saved ? "✅ Profile Saved!" : saving ? "Saving..." : "Save Profile →"}
-        </button>
+        <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+          <button type="button" onClick={deleteProfile} disabled={saving} style={{ padding: "12px 16px", background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 8, color: "#f87171", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            Delete Business
+          </button>
+          <button className="btn btn-primary" type="submit" disabled={saving} style={{ flex: 1, justifyContent: "center" }}>
+            {saved ? "✅ Profile Saved!" : saving ? "Saving..." : "Save Profile →"}
+          </button>
+        </div>
       </form>
     </div>
   );
