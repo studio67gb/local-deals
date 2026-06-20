@@ -19,6 +19,8 @@ function RegisterForm() {
   const [step, setStep] = useState<"form" | "done">("form");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [dealImageFile, setDealImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     ownerName: "", ownerEmail: "", ownerPassword: "", ownerPasswordConfirm: "",
     name: "", category: "Restaurant & Food",
@@ -61,6 +63,21 @@ function RegisterForm() {
       });
       if (!bizRes.ok) throw new Error("Failed to register business");
       const biz = await bizRes.json();
+
+      // Upload logo if selected
+      if (logoFile) {
+        const fd = new FormData();
+        fd.append("logo", logoFile);
+        await fetch("/api/business/upload-logo", { method: "POST", body: fd });
+      }
+
+      // Upload deal image if selected
+      if (dealImageFile && biz.deals && biz.deals.length > 0) {
+        const dealId = biz.deals[0].id;
+        const fd = new FormData();
+        fd.append("image", dealImageFile);
+        await fetch(`/api/business/deals/${dealId}/upload-image`, { method: "POST", body: fd });
+      }
 
       // If paid plan selected, redirect to Stripe Checkout
       if (selectedPlan === "standard" || selectedPlan === "featured") {
@@ -159,9 +176,17 @@ function RegisterForm() {
         {/* Business Info */}
         <div className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
           <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Business Info</h2>
-          <div>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Business Name *</label>
-            <input className="input" required value={form.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Smith&apos;s Plumbing Services" />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div>
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Business Name *</label>
+              <input className="input" required value={form.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Smith&apos;s Plumbing Services" />
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Business Logo (Optional)</label>
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed var(--border)", borderRadius: 8, padding: "8px 12px" }}>
+                <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => setLogoFile(e.target.files?.[0] || null)} style={{ fontSize: 12, color: "var(--text-dim)", width: "100%" }} />
+              </div>
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
@@ -213,9 +238,17 @@ function RegisterForm() {
             <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Your Exclusive Offer</h2>
             <p style={{ fontSize: 12, color: "var(--text-dim)", marginTop: 4 }}>What deal will you offer LocalDeals customers?</p>
           </div>
-          <div>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Offer Headline *</label>
-            <input className="input" required value={form.offerTitle} onChange={e => set("offerTitle", e.target.value)} placeholder="e.g. 20% Off Your First Visit" />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div>
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Offer Headline *</label>
+              <input className="input" required value={form.offerTitle} onChange={e => set("offerTitle", e.target.value)} placeholder="e.g. 20% Off Your First Visit" />
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Deal Image (Optional)</label>
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed var(--border)", borderRadius: 8, padding: "8px 12px" }}>
+                <input type="file" accept="image/jpeg,image/png,image/webp" onChange={e => setDealImageFile(e.target.files?.[0] || null)} style={{ fontSize: 12, color: "var(--text-dim)", width: "100%" }} />
+              </div>
+            </div>
           </div>
           <div>
             <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Full Offer Details *</label>

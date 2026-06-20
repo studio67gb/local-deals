@@ -54,8 +54,22 @@ export async function POST(req: NextRequest) {
         }
       } : undefined,
     },
+    include: { deals: true },
   });
+
+  // Create session token so they can upload images immediately
+  const session = await prisma.businessSession.create({
+    data: { businessId: business.id },
+  });
+
   // Don't return the hashed password
   const { ownerPassword: _, ...safe } = business as typeof business & { ownerPassword?: string };
-  return NextResponse.json(safe);
+  const res = NextResponse.json(safe);
+  res.cookies.set("biz_session", session.id, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    path: "/",
+    sameSite: "lax",
+  });
+  return res;
 }
