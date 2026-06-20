@@ -54,6 +54,7 @@ model Business {
 
   deals       Deal[]
   sessions    BusinessSession[]
+  blogPosts   BlogPost[]
 }
 
 model BusinessSession {
@@ -84,6 +85,7 @@ model Deal {
   reviewCount Int?
 
   claims      Claim[]
+  blogPosts   BlogPost[]
 }
 
 model Claim {
@@ -105,4 +107,11 @@ model BlogPost {
   imageUrl  String?
   author    String   @default("Local Deals UK")
   published Boolean  @default(true)
+
+  // Optional relations for tagging local businesses and deals
+  businessId Int?
+  business   Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+  
+  dealId     Int?
+  deal       Deal?     @relation(fields: [dealId], references: [id], onDelete: SetNull)
 }

@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { title, slug, content, excerpt, imageUrl, author } = await req.json();
+    const { title, slug, content, excerpt, imageUrl, author, businessId, dealId } = await req.json();
 
     const post = await prisma.blogPost.create({
       data: {
@@ -19,6 +19,8 @@ export async function POST(req: Request) {
         excerpt,
         imageUrl,
         author: author || "Local Deals UK",
+        businessId: businessId ? parseInt(businessId) : null,
+        dealId: dealId ? parseInt(dealId) : null,
         published: true,
       }
     });

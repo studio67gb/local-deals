@@ -23,7 +23,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = await prisma.blogPost.findUnique({ where: { slug } });
+  const post = await prisma.blogPost.findUnique({ 
+    where: { slug },
+    include: {
+      business: true,
+      deal: true
+    }
+  });
 
   if (!post || !post.published) {
     notFound();
@@ -32,7 +38,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Schema.org JSON-LD for the Article
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": post.title,
     "image": post.imageUrl ? [post.imageUrl] : [],
     "datePublished": post.createdAt.toISOString(),
@@ -48,7 +54,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         "@type": "ImageObject",
         "url": "https://local-deals.uk/icon.png"
       }
-    }
+    },
+    "articleBody": post.content.replace(/<[^>]*>?/gm, ''), // Stripped HTML for pure text schema
+    ...(post.business && {
+      "about": {
+        "@type": "LocalBusiness",
+        "name": post.business.name,
+        "image": post.business.logo,
+        "address": post.business.address
+      }
+    })
   };
 
   return (
@@ -80,6 +95,26 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         style={{ fontSize: 16, lineHeight: 1.8, color: "var(--text)" }}
         dangerouslySetInnerHTML={{ __html: post.content }} 
       />
+
+      {/* Highlighted Tagged Business/Deal */}
+      {(post.business || post.deal) && (
+        <div style={{ marginTop: 48, padding: 32, borderRadius: 16, background: "linear-gradient(135deg, rgba(13,148,136,0.1), rgba(244,63,94,0.1))", border: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", color: "#0D9488", marginBottom: 12, letterSpacing: 1 }}>Featured Local Business</div>
+          {post.deal ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <h3 style={{ fontSize: 24, fontWeight: 800 }}>{post.deal.title}</h3>
+              <p style={{ color: "var(--text-dim)" }}>Available at <strong>{post.business?.name}</strong></p>
+              <a href={`/deal/${post.deal.id}`} className="btn btn-primary" style={{ alignSelf: "flex-start", marginTop: 8 }}>View Deal & Claim</a>
+            </div>
+          ) : post.business && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <h3 style={{ fontSize: 24, fontWeight: 800 }}>{post.business.name}</h3>
+              <p style={{ color: "var(--text-dim)" }}>{post.business.description}</p>
+              <a href={`/deal?business=${post.business.id}`} className="btn btn-orange" style={{ alignSelf: "flex-start", marginTop: 8 }}>View Business Profile</a>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Basic styling for the injected HTML content */}
       <style dangerouslySetInnerHTML={{ __html: `

@@ -3,6 +3,7 @@ import { useState, Suspense, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import B2BFAQ from "@/components/B2BFAQ";
+import B2BComparison from "@/components/B2BComparison";
 
 const CATEGORIES = ["Restaurant & Food","Beauty & Hair","Health & Fitness","Retail & Shopping","Trades & Services","Entertainment","Automotive","Other"];
 const PLAN_LABELS: Record<string, string> = { standard: "Standard — £5/mo", featured: "Featured — £15/mo" };
@@ -219,6 +220,7 @@ function RegisterForm() {
         </article>
       </section>
 
+      <B2BComparison />
       <B2BFAQ />
 
       <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>

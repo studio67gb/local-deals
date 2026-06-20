@@ -10,11 +10,18 @@ interface BlogPost {
   createdAt: string;
 }
 
+interface BizOption {
+  id: number;
+  name: string;
+  deals: { id: number; title: string; active: boolean }[];
+}
+
 export default function AdminBlogPage() {
   const router = useRouter();
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [businesses, setBusinesses] = useState<BizOption[]>([]);
 
   const [form, setForm] = useState({
     title: "",
@@ -22,17 +29,27 @@ export default function AdminBlogPage() {
     content: "",
     excerpt: "",
     imageUrl: "",
-    author: "Local Deals UK"
+    author: "Local Deals UK",
+    businessId: "",
+    dealId: ""
   });
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/stats").then(r => {
-      if (r.ok) { setAuthed(true); loadPosts(); }
+      if (r.ok) { setAuthed(true); loadPosts(); loadOptions(); }
       else router.push("/admin");
     }).catch(() => router.push("/admin"));
   }, [router]);
+
+  const loadOptions = async () => {
+    const r = await fetch("/api/admin/blog/options");
+    if (r.ok) {
+      const data = await r.json();
+      setBusinesses(data.businesses || []);
+    }
+  };
 
   const loadPosts = async () => {
     // We can just fetch the public blog API, but since we are admin, we'll fetch everything
@@ -83,7 +100,7 @@ export default function AdminBlogPage() {
       
       if (res.ok) {
         setShowForm(false);
-        setForm({ title: "", slug: "", content: "", excerpt: "", imageUrl: "", author: "Local Deals UK" });
+        setForm({ title: "", slug: "", content: "", excerpt: "", imageUrl: "", author: "Local Deals UK", businessId: "", dealId: "" });
         loadPosts();
       } else {
         const data = await res.json();
@@ -157,6 +174,26 @@ export default function AdminBlogPage() {
               <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Content (Markdown or Text) *</label>
               <textarea className="input" required rows={12} value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} placeholder="Write your full blog post here. You can use Markdown formatting..." style={{ fontFamily: "monospace" }} />
             </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Tag a Local Business (Optional)</label>
+              <select className="input" value={form.businessId} onChange={e => setForm({ ...form, businessId: e.target.value, dealId: "" })}>
+                <option value="">-- No Business Tagged --</option>
+                {businesses.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+              </select>
+            </div>
+
+            {form.businessId && (
+              <div>
+                <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Tag a Specific Deal (Optional)</label>
+                <select className="input" value={form.dealId} onChange={e => setForm({ ...form, dealId: e.target.value })}>
+                  <option value="">-- Highlight Business Only --</option>
+                  {businesses.find(b => b.id.toString() === form.businessId)?.deals.map(d => (
+                    <option key={d.id} value={d.id}>{d.title} {d.active ? "" : "(Inactive)"}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
               <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Publishing..." : "Publish Post"}</button>
