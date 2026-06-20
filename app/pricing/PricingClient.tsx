@@ -79,9 +79,34 @@ const FAQ = [
 
 export default function PricingClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [business, setBusiness] = useState<any>(null);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    fetch("/api/business/me")
+      .then(r => r.ok ? r.json() : null)
+      .then(setBusiness)
+      .catch(() => setBusiness(null));
+  }, []);
+
   const handleSelect = async (tier: string) => {
+    if (business && (tier === "standard" || tier === "featured")) {
+      setLoadingCheckout(true);
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ businessId: business.id, tier }),
+      });
+      if (res.ok) {
+        const { url } = await res.json();
+        window.location.href = url;
+        return;
+      }
+      setLoadingCheckout(false);
+      // Fallback if checkout creation fails
+    }
+
     if (tier === "free") {
       router.push("/register");
       return;
@@ -146,6 +171,7 @@ export default function PricingClient() {
               <p style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 28, lineHeight: 1.5 }}>{t.description}</p>
               <button
                 onClick={() => handleSelect(t.key)}
+                disabled={loadingCheckout}
                 className={t.popular ? "btn btn-primary" : "btn btn-ghost"}
                 style={{
                   width: "100%", justifyContent: "center", padding: "14px 24px", fontSize: 15,
@@ -156,7 +182,7 @@ export default function PricingClient() {
                   } : {}),
                 }}
               >
-                {t.cta}
+                {loadingCheckout && (t.key === "standard" || t.key === "featured") ? "Redirecting to Stripe..." : t.cta}
               </button>
             </div>
 
