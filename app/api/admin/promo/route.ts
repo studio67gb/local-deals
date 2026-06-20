@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
-  const authErr = requireAdmin(req);
+  const authErr = await requireAdmin(req);
   if (authErr) return authErr;
 
   try {

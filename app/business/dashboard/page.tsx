@@ -436,7 +436,7 @@ export default function BusinessDashboard() {
   const router = useRouter();
   const [business, setBusiness] = useState<Business | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"share" | "edit" | "profile" | "stats">("share");
+  const [tab, setTab] = useState<"share" | "edit" | "create" | "profile" | "stats">("share");
   const [activeDeal, setActiveDeal] = useState<Deal | null>(null);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/auth";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const denied = requireAdmin(req);
+  const denied = await requireAdmin(req);
   if (denied) return denied;
 
   const businesses = await prisma.business.findMany({
