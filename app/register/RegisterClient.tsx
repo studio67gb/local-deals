@@ -1,15 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 const CATEGORIES = ["Restaurant & Food","Beauty & Hair","Health & Fitness","Retail & Shopping","Trades & Services","Entertainment","Automotive","Other"];
-const AREAS = [
-  "London", "Birmingham", "Manchester", "Leeds", "Sheffield",
-  "Glasgow", "Edinburgh", "Liverpool", "Bristol", "Cardiff",
-  "Doncaster", "Rotherham", "Barnsley", "Wakefield", "Hull", "York",
-  "Other - UK Wide"
-];
 const PLAN_LABELS: Record<string, string> = { standard: "Standard — £5/mo", featured: "Featured — £15/mo" };
 const PLAN_COLORS: Record<string, string> = { standard: "#0D9488", featured: "#F43F5E" };
 
@@ -21,6 +14,14 @@ function RegisterForm() {
   const [error, setError] = useState("");
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [dealImageFile, setDealImageFile] = useState<File | null>(null);
+  
+  // Search state
+  const [searchResults, setSearchResults] = useState<{name:string, companyNumber:string, addressSnippet:string}[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
   const [form, setForm] = useState({
     ownerName: "", ownerEmail: "", ownerPassword: "", ownerPasswordConfirm: "",
     name: "", category: "Restaurant & Food",
@@ -30,6 +31,65 @@ function RegisterForm() {
   });
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  // Handle clicking outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Search effect
+  useEffect(() => {
+    if (!form.name || form.name.length < 3 || !showDropdown) {
+      setSearchResults([]);
+      return;
+    }
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const res = await fetch(`/api/companies-house/search?q=${encodeURIComponent(form.name)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setSearchResults(data.results || []);
+        }
+      } catch (e) {
+        console.error("Search failed", e);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 500);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [form.name, showDropdown]);
+
+  const selectCompany = async (companyNumber: string, companyName: string) => {
+    setShowDropdown(false);
+    set("name", companyName);
+    
+    try {
+      const res = await fetch(`/api/companies-house/profile?companyNumber=${encodeURIComponent(companyNumber)}`);
+      if (res.ok) {
+        const profile = await res.json();
+        setForm(f => ({
+          ...f,
+          address: profile.address || f.address,
+          area: profile.locality || f.area,
+        }));
+      }
+    } catch (e) {
+      console.error("Failed to fetch profile", e);
+    }
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -177,10 +237,44 @@ function RegisterForm() {
         <div className="card" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
           <h2 style={{ fontSize: 14, fontWeight: 800, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Business Info</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Business Name *</label>
-              <input className="input" required value={form.name} onChange={e => set("name", e.target.value)} placeholder="e.g. Smith&apos;s Plumbing Services" />
-            </div>
+            <div style={{ position: "relative" }} ref={dropdownRef}>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Business Name *</label>
+            <input 
+              className="input" 
+              required 
+              value={form.name} 
+              onChange={e => {
+                set("name", e.target.value);
+                setShowDropdown(true);
+              }} 
+              onFocus={() => setShowDropdown(true)}
+              placeholder="e.g. Smith&apos;s Plumbing Services" 
+            />
+            {showDropdown && (form.name.length >= 3) && (
+              <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 8, marginTop: 4, zIndex: 50, overflow: "hidden", boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5)" }}>
+                {isSearching ? (
+                  <div style={{ padding: 12, fontSize: 13, color: "var(--text-dim)", textAlign: "center" }}>Searching Companies House...</div>
+                ) : searchResults.length > 0 ? (
+                  <div style={{ maxHeight: 250, overflowY: "auto" }}>
+                    {searchResults.map(res => (
+                      <div 
+                        key={res.companyNumber} 
+                        onClick={() => selectCompany(res.companyNumber, res.name)}
+                        style={{ padding: "10px 12px", borderBottom: "1px solid var(--border)", cursor: "pointer", transition: "background 0.2s" }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                      >
+                        <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{res.name}</div>
+                        <div style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 2 }}>{res.addressSnippet}</div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ padding: 12, fontSize: 13, color: "var(--text-dim)", textAlign: "center" }}>No exact match. You can still use this name!</div>
+                )}
+              </div>
+            )}
+          </div>
             <div>
               <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Business Logo (Optional)</label>
               <div style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed var(--border)", borderRadius: 8, padding: "8px 12px" }}>
@@ -196,10 +290,8 @@ function RegisterForm() {
               </select>
             </div>
             <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Area *</label>
-              <select className="input" value={form.area} onChange={e => set("area", e.target.value)}>
-                {AREAS.map(a => <option key={a}>{a}</option>)}
-              </select>
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Area (Town/City) *</label>
+              <input className="input" required value={form.area} onChange={e => set("area", e.target.value)} placeholder="e.g. Doncaster" />
             </div>
           </div>
           <div>
