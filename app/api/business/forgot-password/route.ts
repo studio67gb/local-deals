@@ -20,12 +20,12 @@ export async function POST(req: NextRequest) {
       .setExpirationTime("15m")
       .sign(secret);
 
-    const resetLink = \`\${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/business/reset-password?token=\${token}\`;
+    const resetLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/business/reset-password?token=${token}`;
     
     // In a real app, send an email here.
     // For now, we log it to the console so the user can test the flow.
     console.log("=========================================");
-    console.log(\`PASSWORD RESET LINK FOR \${email}:\`);
+    console.log(`PASSWORD RESET LINK FOR ${email}:`);
     console.log(resetLink);
     console.log("=========================================");
   }
