@@ -266,7 +266,7 @@ function AdminBlogPage() {
             </div>
           </form>
         </div>
-      )}
+      ) : null}
 
       {/* Blog Posts List */}
       {posts.length > 0 && (
