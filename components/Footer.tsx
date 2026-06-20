@@ -16,7 +16,7 @@ export default function Footer() {
         ))}
       </div>
       <p style={{ fontSize: 12, color: "var(--text-dim)" }}>
-        © 2026 External Impression Ltd (Company No. 16748423) trading as Local Deals · Connecting people with independent businesses across the UK
+        © 2026 External Impression Ltd (Company No. 16748423) trading as Local Deals · ICO Registration: ZC071025 · Connecting people with independent businesses across the UK
       </p>
       <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 6 }}>
         This site uses Google AdSense. <Link href="/privacy" style={{ color: "var(--text-dim)", textDecoration: "underline" }}>Privacy Policy</Link>

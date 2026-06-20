@@ -236,7 +236,7 @@ function RegisterForm() {
         {error && <p style={{ color: "#f87171", fontSize: 13, textAlign: "center" }}>{error}</p>}
 
         <button className="btn btn-primary" type="submit" disabled={loading} style={{ justifyContent: "center", padding: "18px 24px", fontSize: 16, ...(selectedPlan === "featured" ? { background: "linear-gradient(135deg, #F43F5E, #7c3aed)" } : {}) }}>
-          {loading ? "Submitting..." : selectedPlan !== "free" ? `Register & Subscribe — ${PLAN_LABELS[selectedPlan]}` : "Submit My Listing — It&apos;s Free →"}
+          {loading ? "Submitting..." : selectedPlan !== "free" ? `Register & Subscribe — ${PLAN_LABELS[selectedPlan]}` : "Submit My Listing — It's Free"}
         </button>
         <p style={{ fontSize: 11, color: "var(--text-dim)", textAlign: "center" }}>
           Your listing will be reviewed and live within 24 hours. No payment required.
