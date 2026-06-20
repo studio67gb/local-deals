@@ -120,6 +120,7 @@ export default function AdminPage() {
           <p style={{ color: "var(--text-muted)", fontSize: 14, marginTop: 4 }}>Manage businesses and deals</p>
         </div>
         <div style={{ display: "flex", gap: 12 }}>
+          <a href="/admin/blog" className="btn btn-ghost" style={{ background: "rgba(255,255,255,0.05)" }}>📝 Manage Blog</a>
           <a href="/admin/businesses/new" className="btn btn-ghost">+ Add Business</a>
           <a href="/admin/deals/new" className="btn btn-primary">+ Add Deal</a>
         </div>

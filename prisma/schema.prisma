@@ -92,3 +92,17 @@ model Claim {
   dealId    Int
   deal      Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
 }
+
+model BlogPost {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title     String
+  slug      String   @unique
+  content   String
+  excerpt   String?
+  imageUrl  String?
+  author    String   @default("Local Deals UK")
+  published Boolean  @default(true)
+}

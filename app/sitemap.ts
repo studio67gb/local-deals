@@ -8,9 +8,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     select: { id: true, updatedAt: true }
   });
 
+  // Fetch published blog posts
+  const blogPosts = await prisma.blogPost.findMany({
+    where: { published: true },
+    select: { slug: true, updatedAt: true }
+  });
+
   const dealEntries: MetadataRoute.Sitemap = deals.map((deal) => ({
     url: `https://local-deals.uk/deal/${deal.id}`,
     lastModified: deal.updatedAt,
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }));
+
+  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `https://local-deals.uk/blog/${post.slug}`,
+    lastModified: post.updatedAt,
     changeFrequency: 'weekly',
     priority: 0.8,
   }));
@@ -21,6 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
+    },
+    {
+      url: 'https://local-deals.uk/blog',
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
     },
     {
       url: 'https://local-deals.uk/map',
@@ -48,5 +67,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return [...staticEntries, ...dealEntries];
+  return [...staticEntries, ...dealEntries, ...blogEntries];
 }
