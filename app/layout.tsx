@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "";
 
@@ -19,8 +21,8 @@ export const metadata: Metadata = {
 /* Critical dark-theme CSS injected as raw string so it survives hydration */
 const CRITICAL_CSS = `
 html, body {
-  background: #0F172A !important;
-  color: #f8fafc !important;
+  background: #0B0F19 !important;
+  color: #F9FAFB !important;
   color-scheme: dark !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
   -webkit-font-smoothing: antialiased;
@@ -35,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
         {/* Google AdSense verification — must be in <head> for crawler */}
         {ADSENSE_CLIENT && ADSENSE_CLIENT !== "ca-pub-PENDING" && (
           <script
@@ -46,33 +48,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body suppressHydrationWarning>
-        <nav style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-          background: "rgba(15,15,19,0.92)", backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          padding: "0 24px", height: "60px",
-          display: "flex", alignItems: "center", justifyContent: "space-between"
-        }}>
-          <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 8,
-              background: "linear-gradient(135deg, #0D9488, #F43F5E)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 16, fontWeight: 900, color: "white"
-            }}>L</div>
-            <span style={{ fontWeight: 800, fontSize: 17, color: "#f1f5f9" }}>Local<span style={{ color: "#F43F5E" }}>Deals</span></span>
-          </a>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <a href="/map" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>🗺️ Map</a>
-            <a href="/pricing" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>💰 Pricing</a>
-            <a href="/about" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>About</a>
-            <a href="/register" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>List Your Business</a>
-            <a href="/business/login" style={{ color: "#cbd5e1", fontSize: 14, textDecoration: "none", fontWeight: 500 }}>Business Login</a>
-            <a href="/admin" className="btn btn-primary" style={{ padding: "8px 18px", fontSize: 13 }}>Admin</a>
-          </div>
-        </nav>
-        <div style={{ paddingTop: 60 }}>
-          {children}
+        <Navbar />
+        <div style={{ paddingTop: 60, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+          <main style={{ flex: 1 }}>
+            {children}
+          </main>
+          <Footer />
         </div>
       </body>
     </html>

@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Use — Local Deals UK",
+  description: "Terms and conditions for using Local Deals UK.",
+};
+
 export default function TermsPage() {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px 80px" }}>
@@ -10,8 +17,8 @@ export default function TermsPage() {
           body: `By accessing and using local-deals.uk, you accept and agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our website.`,
         },
         {
-          title: "2. About the Service",
-          body: `Local Deals UK is a platform that connects consumers with exclusive offers from local independent businesses. We act as a directory service and are not party to any transaction between consumers and businesses listed on our platform.`,
+          title: "2. About the Service & Company",
+          body: `Local Deals UK is a trading name of External Impression Ltd (Company Number 16748423), registered in England and Wales. Our registered office is 67 Malvern Road, Goole, England, DN14 6HU.\n\nLocal Deals UK is a platform that connects consumers with exclusive offers from local independent businesses. We act as a directory service and are not party to any transaction between consumers and businesses listed on our platform.`,
         },
         {
           title: "3. Business Listings",

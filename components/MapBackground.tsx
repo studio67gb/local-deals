@@ -39,6 +39,16 @@ export default function MapBackground() {
       return;
     }
 
+    if (document.querySelector('script[src*="maps.googleapis.com"]')) {
+      const checkGoogle = setInterval(() => {
+        if (window.google?.maps) {
+          clearInterval(checkGoogle);
+          setLoaded(true);
+        }
+      }, 100);
+      return () => clearInterval(checkGoogle);
+    }
+
     window.initBackgroundMap = () => setLoaded(true);
 
     const script = document.createElement("script");
@@ -56,16 +66,16 @@ export default function MapBackground() {
         center: { lat: 53.5, lng: -1.15 }, // Centered near Doncaster
         zoom: 9,
         styles: [
-          { elementType: "geometry", stylers: [{ color: "#1a1a24" }] },
-          { elementType: "labels.text.stroke", stylers: [{ color: "#1a1a24" }] },
-          { elementType: "labels.text.fill", stylers: [{ color: "#475569" }] },
-          { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a2a3a" }] },
+          { elementType: "geometry", stylers: [{ color: "#0B0F19" }] },
+          { elementType: "labels.text.stroke", stylers: [{ color: "#0B0F19" }] },
+          { elementType: "labels.text.fill", stylers: [{ color: "#9ca3af" }] },
+          { featureType: "road", elementType: "geometry", stylers: [{ color: "#1f2937" }] },
           { featureType: "road", elementType: "labels.text.fill", stylers: [{ visibility: "off" }] },
-          { featureType: "water", elementType: "geometry", stylers: [{ color: "#0f1923" }] },
+          { featureType: "water", elementType: "geometry", stylers: [{ color: "#111827" }] },
           { featureType: "poi", stylers: [{ visibility: "off" }] },
           { featureType: "transit", stylers: [{ visibility: "off" }] },
-          { featureType: "administrative", elementType: "geometry.stroke", stylers: [{ color: "#334155" }] },
-          { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#475569" }] },
+          { featureType: "administrative", elementType: "geometry.stroke", stylers: [{ color: "#374151" }] },
+          { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#9ca3af" }] },
         ],
         disableDefaultUI: true,
         gestureHandling: "none",
@@ -77,24 +87,29 @@ export default function MapBackground() {
 
     const map = mapInstanceRef.current;
 
+    const markers: google.maps.Marker[] = [];
     if (businesses.length > 0) {
       businesses.forEach((b) => {
-        new window.google.maps.Marker({
+        markers.push(new window.google.maps.Marker({
           position: { lat: b.lat!, lng: b.lng! },
           map,
           icon: {
             path: window.google.maps.SymbolPath.CIRCLE,
             scale: 6, // Smaller for background
-            fillColor: "#F43F5E", // Coral
-            fillOpacity: 0.9,
+            fillColor: "#10B981", // Bright Mint
+            fillOpacity: 0.8,
             strokeWeight: 2,
-            strokeColor: "#E11D48",
+            strokeColor: "#059669", // Emerald Green
             strokeOpacity: 0.5
           },
           clickable: false,
-        });
+        }));
       });
     }
+
+    return () => {
+      markers.forEach(m => m.setMap(null));
+    };
 
   }, [loaded, businesses]);
 

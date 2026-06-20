@@ -172,6 +172,61 @@ function EditDealForm({ deal, onSaved, onDeleted }: { deal: Deal; onSaved: (d: D
   );
 }
 
+function CreateDealForm({ onSaved }: { onSaved: (d: Deal) => void }) {
+  const [form, setForm] = useState({
+    title: "", description: "",
+    offerCode: "", terms: "",
+    expiresAt: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    const r = await fetch("/api/business/deals", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+    if (r.ok) { onSaved(await r.json()); }
+    else { const d = await r.json(); setError(d.error || "Failed to create deal"); }
+    setLoading(false);
+  };
+
+  return (
+    <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {error && <div style={{ color: "#f87171", fontSize: 13, background: "rgba(248,113,113,0.1)", padding: 12, borderRadius: 8 }}>{error}</div>}
+      {[
+        { label: "Offer Headline", key: "title", type: "text", required: true },
+      ].map(f => (
+        <div key={f.key}>
+          <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>{f.label}</label>
+          <input className="input" required={f.required} value={form[f.key as keyof typeof form]} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))} />
+        </div>
+      ))}
+      <div>
+        <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Full Details</label>
+        <textarea className="input" required rows={3} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} style={{ resize: "vertical" }} />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div>
+          <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Offer Code</label>
+          <input className="input" placeholder="e.g. SAVE20" value={form.offerCode} onChange={e => setForm(p => ({ ...p, offerCode: e.target.value }))} />
+        </div>
+        <div>
+          <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Expiry Date</label>
+          <input className="input" type="date" value={form.expiresAt} onChange={e => setForm(p => ({ ...p, expiresAt: e.target.value }))} />
+        </div>
+      </div>
+      <div>
+        <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Terms & Conditions</label>
+        <input className="input" placeholder="e.g. New customers only" value={form.terms} onChange={e => setForm(p => ({ ...p, terms: e.target.value }))} />
+      </div>
+      <button className="btn btn-primary" type="submit" disabled={loading} style={{ justifyContent: "center", padding: "14px 24px" }}>
+        {loading ? "Creating..." : "Create Deal →"}
+      </button>
+    </form>
+  );
+}
+
 // ─── Profile / Logo / Socials ─────────────────────────────────────────────────
 function ProfileTab({ business, onUpdated }: { business: Business; onUpdated: (b: Partial<Business>) => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -472,7 +527,8 @@ export default function BusinessDashboard() {
         <div style={{ display: "flex", borderBottom: "1px solid var(--border)", overflowX: "auto" }}>
           {([
             { key: "share", label: "📣 Share" },
-            { key: "edit", label: "✏️ Edit Deal" },
+            { key: "edit", label: "✏️ Manage Deals" },
+            { key: "create", label: "➕ Create Deal" },
             { key: "profile", label: "🏪 Profile & Socials" },
             { key: "stats", label: "📊 My Listing" },
           ] as const).map(t => (
@@ -488,8 +544,32 @@ export default function BusinessDashboard() {
         <div style={{ padding: 28 }}>
           {tab === "share" && activeDeal && <SharePanel business={business} deal={activeDeal} />}
           {tab === "share" && !activeDeal && <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "40px 0" }}>No active deal yet — pending admin approval.</div>}
-          {tab === "edit" && activeDeal && <EditDealForm deal={activeDeal} onSaved={d => setActiveDeal(d)} onDeleted={() => { setActiveDeal(null); setBusiness(b => b ? { ...b, deals: [] } : b); setTab("stats"); }} />}
+          
+          {tab === "edit" && activeDeal && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+              {business.deals.map(d => (
+                <div key={d.id} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", padding: 20, borderRadius: 12 }}>
+                  <EditDealForm deal={d} onSaved={updated => {
+                    setBusiness(b => b ? { ...b, deals: b.deals.map(x => x.id === d.id ? updated : x) } : b);
+                    if (activeDeal.id === d.id) setActiveDeal(updated);
+                  }} onDeleted={() => {
+                    const newDeals = business.deals.filter(x => x.id !== d.id);
+                    setBusiness(b => b ? { ...b, deals: newDeals } : b);
+                    if (activeDeal.id === d.id) setActiveDeal(newDeals[0] || null);
+                  }} />
+                </div>
+              ))}
+            </div>
+          )}
           {tab === "edit" && !activeDeal && <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "40px 0" }}>No active deal to edit yet.</div>}
+          
+          {tab === "create" && (
+            <CreateDealForm onSaved={newDeal => {
+              setBusiness(b => b ? { ...b, deals: [...b.deals, newDeal] } : b);
+              if (!activeDeal) setActiveDeal(newDeal);
+              setTab("edit");
+            }} />
+          )}
           {tab === "profile" && (
             <ProfileTab
               business={business}

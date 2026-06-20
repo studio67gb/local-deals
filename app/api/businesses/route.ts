@@ -37,13 +37,22 @@ export async function POST(req: NextRequest) {
       address: body.address || null,
       instagram: body.instagram || null,
       facebook: body.facebook || null,
-      featured: body.featured || false,
-      status: body.status || "active",
+      featured: false,
+      status: "pending",
       ownerName: body.ownerName || null,
       ownerEmail: body.ownerEmail ? body.ownerEmail.toLowerCase().trim() : null,
       ownerPassword,
       lat: coords?.lat ?? null,
       lng: coords?.lng ?? null,
+      deals: body.offerTitle ? {
+        create: {
+          title: body.offerTitle,
+          description: body.offerDescription,
+          offerCode: body.offerCode || null,
+          terms: body.offerTerms || null,
+          active: false,
+        }
+      } : undefined,
     },
   });
   // Don't return the hashed password

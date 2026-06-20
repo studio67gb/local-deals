@@ -7,7 +7,8 @@ interface DealDetail {
   id: number;
   title: string;
   description: string;
-  offerCode: string | null;
+  offerCode?: string | null;
+  hasOfferCode?: boolean;
   terms: string | null;
   expiresAt: string | null;
   claimCount: number;
@@ -80,7 +81,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
         animation: "fadeIn 0.2s ease",
       }}>
         <div style={{
-          background: "var(--surface)", borderRadius: 20,
+          background: "var(--bg-card)", borderRadius: 20,
           border: "1px solid var(--border)",
           width: "100%", maxWidth: 380,
           boxShadow: "0 40px 80px rgba(0,0,0,0.6)",
@@ -89,7 +90,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
         }}>
           {/* Header */}
           <div style={{
-            background: "linear-gradient(135deg, rgba(13,148,136,0.15), rgba(244,63,94,0.15))",
+            background: "linear-gradient(135deg, rgba(13,148,136,0.15), rgba(249,115,22,0.15))",
             borderBottom: "1px solid var(--border)",
             padding: "18px 24px",
             display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -103,7 +104,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
             {/* SVG countdown ring */}
             {!unlocked && (
               <svg width={52} height={52} style={{ flexShrink: 0 }}>
-                <circle cx={26} cy={26} r={radius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={4} />
+                <circle cx={26} cy={26} r={radius} fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth={4} />
                 <circle
                   cx={26} cy={26} r={radius}
                   fill="none"
@@ -115,7 +116,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
                   transform="rotate(-90 26 26)"
                   style={{ transition: "stroke-dashoffset 1s linear" }}
                 />
-                <text x={26} y={31} textAnchor="middle" fill="white" fontSize={14} fontWeight={800}>{seconds}</text>
+                <text x={26} y={31} textAnchor="middle" fill="var(--text)" fontSize={14} fontWeight={800}>{seconds}</text>
               </svg>
             )}
           </div>
@@ -145,7 +146,7 @@ function AdGateModal({ onComplete }: { onComplete: () => void }) {
             ) : (
               <div style={{
                 textAlign: "center", padding: "14px",
-                background: "rgba(255,255,255,0.03)",
+                background: "rgba(0,0,0,0.03)",
                 border: "1px solid var(--border)",
                 borderRadius: 12,
                 fontSize: 13, color: "var(--text-dim)",
@@ -190,11 +191,26 @@ export default function DealPage() {
 
   const handleAdComplete = async () => {
     setShowAdGate(false);
+
+    if (deal?.hasOfferCode) {
+      try {
+        const revealRes = await fetch(`/api/deals/${id}/reveal`, { method: "POST" });
+        if (revealRes.ok) {
+          const revealData = await revealRes.json();
+          setDeal(d => d ? { ...d, offerCode: revealData.offerCode } : null);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     setRevealed(true);
     // Register claim
-    const r = await fetch(`/api/deals/${id}/claim`, { method: "POST" });
-    const data = await r.json();
-    setClaimCount(data.claimCount);
+    const r = await fetch(`/api/deals/${id}/claim`, { method: "POST" }).catch(() => null);
+    if (r?.ok) {
+      const data = await r.json();
+      setClaimCount(data.claimCount);
+    }
   };
 
   const copyCode = () => {
@@ -230,7 +246,7 @@ export default function DealPage() {
       <div className="card" style={{ padding: 28, marginBottom: 20 }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 16 }}>
           {/* Logo */}
-          <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", background: "linear-gradient(135deg,#0D9488,#F43F5E)", flexShrink: 0, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", background: "linear-gradient(135deg,#0D9488,#f97316)", flexShrink: 0, position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {deal.business.logo
               ? <img src={deal.business.logo} alt={deal.business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               : <span style={{ fontSize: 26 }}>🏪</span>}
@@ -263,7 +279,7 @@ export default function DealPage() {
         )}
 
         {deal.featured && (
-          <div style={{ background: "linear-gradient(135deg,#0D9488,#F43F5E)", padding: "6px 16px", margin: deal.imageUrl ? "0 -28px 24px" : "-28px -28px 24px", display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ background: "linear-gradient(135deg,#0D9488,#f97316)", padding: "6px 16px", margin: deal.imageUrl ? "0 -28px 24px" : "-28px -28px 24px", display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ fontSize: 11, fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "0.08em" }}>⭐ Featured Deal</span>
           </div>
         )}
@@ -309,7 +325,7 @@ export default function DealPage() {
         <div style={{ marginTop: 20, fontSize: 12, color: "var(--text-dim)", textAlign: "center" }}>🔥 {claimCount} people have claimed this deal</div>
 
         {deal.terms && (
-          <div style={{ marginTop: 24, padding: 16, background: "rgba(255,255,255,0.02)", borderRadius: 8, borderTop: "1px solid var(--border)" }}>
+          <div style={{ marginTop: 24, padding: 16, background: "rgba(0,0,0,0.02)", borderRadius: 8, borderTop: "1px solid var(--border)" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Terms & Conditions</div>
             <p style={{ fontSize: 12, color: "var(--text-dim)", lineHeight: 1.6 }}>{deal.terms}</p>
           </div>

@@ -1,12 +1,19 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us — Local Deals UK",
+  description: "Learn about Local Deals UK and our mission to connect people with independent businesses.",
+};
+
 export default function AboutPage() {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px 80px" }}>
 
       {/* Hero */}
       <div style={{ textAlign: "center", marginBottom: 60 }}>
-        <div style={{ width: 64, height: 64, borderRadius: 16, background: "linear-gradient(135deg,#0D9488,#F43F5E)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, margin: "0 auto 20px" }}>🎁</div>
+        <div style={{ width: 64, height: 64, borderRadius: 16, background: "linear-gradient(135deg,#f97316,#8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, margin: "0 auto 20px" }}>🎁</div>
         <h1 style={{ fontSize: 38, fontWeight: 900, lineHeight: 1.1, marginBottom: 16 }}>
-          About <span style={{ background: "linear-gradient(135deg,#0D9488,#F43F5E)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Local Deals UK</span>
+          About <span style={{ background: "linear-gradient(135deg,#f97316,#8b5cf6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Local Deals UK</span>
         </h1>
         <p style={{ fontSize: 18, color: "var(--text-muted)", lineHeight: 1.7, maxWidth: 520, margin: "0 auto" }}>
           We connect people with exclusive offers from independent businesses in their local area — across the whole of the UK.
@@ -32,7 +39,7 @@ export default function AboutPage() {
             { icon: "📊", title: "Track Performance", desc: "Businesses can see how many people have claimed their deal through our dashboard, helping them understand the impact of their listing." },
           ].map(s => (
             <div key={s.title} style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(13,148,136,0.1)", border: "1px solid rgba(13,148,136,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{s.icon}</div>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(249,115,22,0.1)", border: "1px solid rgba(249,115,22,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{s.icon}</div>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>{s.title}</div>
                 <div style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.7 }}>{s.desc}</div>
@@ -51,15 +58,23 @@ export default function AboutPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 14, color: "var(--text-muted)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 18 }}>🌐</span>
-            <span>Website: <a href="https://local-deals.uk" style={{ color: "#0D9488" }}>local-deals.uk</a></span>
+            <span>Website: <a href="https://local-deals.uk" style={{ color: "#f97316" }}>local-deals.uk</a></span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 18 }}>📧</span>
+            <span>Email: <a href="mailto:contact@local-deals.uk" style={{ color: "#f97316" }}>contact@local-deals.uk</a></span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 18 }}>🏢</span>
+            <span>External Impression Ltd (Company No. 16748423) trading as Local Deals</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 18 }}>📍</span>
-            <span>Based in Doncaster, South Yorkshire, UK</span>
+            <span>67 Malvern Road, Goole, England, DN14 6HU</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 18 }}>🏪</span>
-            <span>To list your business: <a href="/register" style={{ color: "#0D9488" }}>local-deals.uk/register</a></span>
+            <span>To list your business: <a href="/register" style={{ color: "#f97316" }}>local-deals.uk/register</a></span>
           </div>
         </div>
       </div>

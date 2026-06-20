@@ -1,6 +1,8 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_fallback");
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+  apiVersion: "2024-06-20", // using a recent api version, or remove options if not needed
+});
 
 export const TIER_LIMITS: Record<string, number> = {
   free: 1,

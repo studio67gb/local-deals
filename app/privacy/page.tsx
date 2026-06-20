@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy — Local Deals UK",
+  description: "Our privacy policy and how we handle your data.",
+};
+
 export default function PrivacyPage() {
   return (
     <div style={{ maxWidth: 760, margin: "0 auto", padding: "60px 24px 80px" }}>
@@ -7,7 +14,7 @@ export default function PrivacyPage() {
       {[
         {
           title: "1. Who We Are",
-          body: `Local Deals UK ("we", "us", "our") operates the website local-deals.uk. We connect local consumers with exclusive offers from independent businesses across the United Kingdom. Our registered contact is available at the address provided on our Contact page.`,
+          body: `Local Deals UK ("we", "us", "our") operates the website local-deals.uk. We are a trading name of External Impression Ltd, a company registered in England and Wales (Company Number 16748423).\n\nWe connect local consumers with exclusive offers from independent businesses across the United Kingdom. We act as a data controller for the personal information we collect through our website. We are registered with the Information Commissioner's Office (ICO) under registration number ZC071025.`,
         },
         {
           title: "2. Information We Collect",
@@ -47,7 +54,7 @@ export default function PrivacyPage() {
         },
         {
           title: "11. Contact Us",
-          body: `If you have any questions about this Privacy Policy or how we handle your personal data, please contact us through our Contact page at local-deals.uk/contact.`,
+          body: `If you have any questions about this Privacy Policy or how we handle your personal data, please contact us by email at contact@local-deals.uk or through our Contact page at local-deals.uk/about#contact.`,
         },
       ].map(section => (
         <div key={section.title} style={{ marginBottom: 36 }}>

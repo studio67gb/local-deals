@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import AdUnit from "@/components/AdUnit";
 import MapBackground from "@/components/MapBackground";
 
@@ -37,11 +38,9 @@ const PILL_MAP: Record<string, string> = {
 
 function DealCard({ deal }: { deal: Deal }) {
   const imgUrl = deal.imageUrl || "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop";
-  const rating = deal.rating || 4.1;
-  const reviews = deal.reviewCount || 1259;
 
   return (
-    <a href={`/deal/${deal.id}`} style={{ textDecoration: "none" }}>
+    <Link href={`/deal/${deal.id}`} style={{ textDecoration: "none" }}>
       <div className="card" style={{ height: "100%", display: "flex", flexDirection: "column", padding: 0, overflow: "hidden" }}>
         
         {/* Image & Overlays */}
@@ -50,60 +49,49 @@ function DealCard({ deal }: { deal: Deal }) {
           
           {/* Popular Gift / Featured Badge */}
           {deal.featured && (
-            <div style={{ position: "absolute", top: 12, left: 12, background: "white", padding: "4px 10px", borderRadius: 4, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
+            <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(17, 24, 39, 0.95)", border: "1px solid var(--border)", padding: "4px 10px", borderRadius: 6, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 4px 12px rgba(0,0,0,0.5)" }}>
               <span style={{ fontSize: 13 }}>🎁</span>
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#0F172A" }}>Popular Gift</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>Popular Gift</span>
             </div>
           )}
-
-          {/* Heart Icon Overlay */}
-          <div style={{ position: "absolute", top: 12, right: 12, background: "white", width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          </div>
-
-          {/* Carousel dots */}
-          <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 5, background: "rgba(0,0,0,0.4)", padding: "5px 10px", borderRadius: 12 }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "white" }} />
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
-          </div>
         </div>
 
         {/* Card Content */}
         <div style={{ padding: "16px", flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
           <div style={{ fontSize: 13, color: "var(--text-muted)" }}>{deal.business.name}</div>
-          <div style={{ fontSize: 17, fontWeight: 700, color: "var(--text)", lineHeight: 1.4 }}>{deal.title}</div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: "var(--text)", lineHeight: 1.4, fontFamily: "'Montserrat', sans-serif" }}>{deal.title}</div>
           
           <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
-            <div style={{ display: "flex", color: "#fbbf24", fontSize: 15 }}>
-              ★★★★<span style={{ color: "var(--border)" }}>★</span>
-            </div>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginLeft: 4 }}>{rating.toFixed(1)}</span>
-            <span style={{ fontSize: 14, color: "var(--text-dim)" }}>({reviews.toLocaleString()})</span>
+            {deal.rating ? (
+              <>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>⭐ {deal.rating.toFixed(1)}</span>
+                <span style={{ fontSize: 14, color: "var(--text-dim)" }}>({deal.reviewCount?.toLocaleString()})</span>
+              </>
+            ) : (
+              <span style={{ fontSize: 12, background: "rgba(255,255,255,0.1)", padding: "2px 8px", borderRadius: 4, color: "var(--text-muted)" }}>New</span>
+            )}
           </div>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 16 }}>
              <span style={{ fontSize: 12, color: "var(--text-dim)" }}>🔥 {deal.claimCount} claimed</span>
              {deal.distanceMiles !== undefined && deal.distanceMiles !== null && (
-                <span style={{ fontSize: 12, color: "#0D9488", fontWeight: 700 }}>📍 {deal.distanceMiles.toFixed(1)} miles away</span>
+                <span style={{ fontSize: 12, color: "var(--teal)", fontWeight: 700 }}>📍 {deal.distanceMiles.toFixed(1)} miles away</span>
              )}
           </div>
         </div>
 
       </div>
-    </a>
+    </Link>
   );
 }
 
 function SkeletonCard() {
   return (
     <div className="card" style={{ height: 380, padding: 0, overflow: "hidden" }}>
-      <div style={{ height: 220, width: "100%", background: "rgba(0,0,0,0.06)", animation: "pulse 1.5s ease infinite" }} />
+      <div style={{ height: 220, width: "100%", background: "rgba(255,255,255,0.03)", animation: "pulse 1.5s ease infinite" }} />
       <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
         {[100, 220, 140, 80].map((w, i) => (
-          <div key={i} style={{ height: 14, width: w, borderRadius: 6, background: "rgba(0,0,0,0.06)", animation: "pulse 1.5s ease infinite" }} />
+          <div key={i} style={{ height: 14, width: w, borderRadius: 6, background: "rgba(255,255,255,0.03)", animation: "pulse 1.5s ease infinite" }} />
         ))}
       </div>
     </div>
@@ -113,12 +101,15 @@ function SkeletonCard() {
 export default function HomePage() {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [locLoading, setLocLoading] = useState(false);
   const [locError, setLocError] = useState("");
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const handleNearMe = () => {
     setLocError("");
@@ -142,19 +133,38 @@ export default function HomePage() {
   };
 
   useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+      setVisibleCount(12);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [search]);
+
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [category, lat, lng]);
+
+  useEffect(() => {
     const params = new URLSearchParams();
-    if (search) params.set("search", search);
+    if (debouncedSearch) params.set("search", debouncedSearch);
     if (category !== "All") params.set("category", category);
     if (lat !== null && lng !== null) {
       params.set("lat", lat.toString());
       params.set("lng", lng.toString());
     }
     setLoading(true);
+    setError("");
     fetch(`/api/deals?${params}`)
-      .then(r => r.json())
+      .then(async r => {
+        if (!r.ok) throw new Error("Failed to fetch deals");
+        return r.json();
+      })
       .then(d => { setDeals(d); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, [search, category, lat, lng]);
+      .catch((e) => { setError(e.message); setLoading(false); });
+  }, [debouncedSearch, category, lat, lng]);
+
+  const visibleDeals = deals.slice(0, visibleCount);
+  const hasMore = visibleCount < deals.length;
 
   return (
     <>
@@ -164,11 +174,11 @@ export default function HomePage() {
       <section style={{ position: "relative", padding: "80px 24px 60px", textAlign: "center", overflow: "hidden" }}>
         <MapBackground />
         
-        <div style={{ position: "absolute", top: -100, left: "20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(13,148,136,0.15),transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", top: -80, right: "15%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(244,63,94,0.12),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: -100, left: "20%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(2,132,199,0.15),transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: -80, right: "15%", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle,rgba(22,163,74,0.12),transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", maxWidth: 700, margin: "0 auto" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(244,63,94,0.1)", border: "1px solid rgba(244,63,94,0.2)", borderRadius: 999, padding: "6px 16px", marginBottom: 24 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#F43F5E", textTransform: "uppercase", letterSpacing: "0.06em" }}>🎉 Exclusive Local Offers</span>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(22,163,74,0.1)", border: "1px solid rgba(22,163,74,0.2)", borderRadius: 999, padding: "6px 16px", marginBottom: 24 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--brand-light)", textTransform: "uppercase", letterSpacing: "0.06em" }}>🎉 Exclusive Local Offers</span>
           </div>
           <h1 style={{ fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 900, lineHeight: 1.1, marginBottom: 16 }}>
             The Best Deals from<br />
@@ -198,9 +208,9 @@ export default function HomePage() {
             onClick={handleNearMe}
             disabled={locLoading}
             style={{ 
-              background: lat ? "rgba(244,63,94,0.15)" : "rgba(0,0,0,0.04)",
-              border: lat ? "1px solid rgba(244,63,94,0.4)" : "1px solid var(--border)",
-              color: lat ? "#F43F5E" : "var(--text)",
+              background: lat ? "rgba(2,132,199,0.15)" : "rgba(255,255,255,0.04)",
+              border: lat ? "1px solid rgba(2,132,199,0.4)" : "1px solid var(--border)",
+              color: lat ? "var(--teal)" : "var(--text)",
               padding: "10px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 
             }}
           >
@@ -222,21 +232,29 @@ export default function HomePage() {
 
       {/* Deals grid */}
       <section style={{ padding: "0 24px 80px", maxWidth: 1200, margin: "0 auto" }}>
-        {loading ? (
+        {error ? (
+          <div style={{ textAlign: "center", padding: "80px 24px" }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>Failed to load deals</div>
+            <div style={{ fontSize: 14, color: "var(--text-muted)" }}>{error}</div>
+            <button onClick={() => window.location.reload()} className="btn btn-ghost" style={{ marginTop: 16 }}>Try Again</button>
+          </div>
+        ) : loading ? (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%, 280px),1fr))", gap: 20 }}>
             {[1,2,3,4,5,6].map(i => <SkeletonCard key={i} />)}
           </div>
         ) : deals.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "80px 24px" }}>
+          <div style={{ textAlign: "center", padding: "80px 24px", background: "rgba(255,255,255,0.03)", borderRadius: 16, border: "1px dashed var(--border)" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
             <div style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>No deals found</div>
-            <div style={{ fontSize: 14, color: "var(--text-muted)" }}>Try a different search or category</div>
+            <div style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 24 }}>We couldn't find any deals matching your search.</div>
+            <Link href="/register" className="btn btn-orange">List a Business Here</Link>
           </div>
         ) : (
           <>
             <div style={{ marginBottom: 20, fontSize: 13, color: "var(--text-dim)" }}>{deals.length} deal{deals.length !== 1 ? "s" : ""} available</div>
             {/* Render deals in chunks of 6 with an ad between each chunk */}
-            {Array.from({ length: Math.ceil(deals.length / 6) }, (_, chunk) => (
+            {Array.from({ length: Math.ceil(visibleDeals.length / 6) }, (_, chunk) => (
               <div key={chunk}>
                 {chunk > 0 && (
                   <AdUnit
@@ -247,33 +265,19 @@ export default function HomePage() {
 
                 )}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(100%, 280px),1fr))", gap: 20, marginBottom: 20 }}>
-                  {deals.slice(chunk * 6, chunk * 6 + 6).map(d => <DealCard key={d.id} deal={d} />)}
+                  {visibleDeals.slice(chunk * 6, chunk * 6 + 6).map(d => <DealCard key={d.id} deal={d} />)}
                 </div>
               </div>
             ))}
+            {hasMore && (
+              <div style={{ textAlign: "center", marginTop: 40 }}>
+                <button className="btn btn-ghost" onClick={() => setVisibleCount(v => v + 12)}>Load More Deals</button>
+              </div>
+            )}
           </>
         )}
       </section>
 
-      {/* Footer */}
-      <footer style={{ borderTop: "1px solid var(--border)", padding: "40px 24px", textAlign: "center" }}>
-        <div style={{ marginBottom: 20, display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap" }}>
-          {[
-            { href: "/about", label: "About Us" },
-            { href: "/about#contact", label: "Contact" },
-            { href: "/register", label: "List Your Business" },
-            { href: "/privacy", label: "Privacy Policy" },
-            { href: "/terms", label: "Terms of Use" },
-            { href: "/admin", label: "Business Login" },
-          ].map(l => (
-            <a key={l.href} href={l.href} style={{ fontSize: 13, color: "var(--text-dim)", textDecoration: "none" }}>{l.label}</a>
-          ))}
-        </div>
-        <p style={{ fontSize: 12, color: "var(--text-dim)" }}>© 2026 Local Deals UK · Connecting people with independent businesses across the UK</p>
-        <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 6 }}>
-          This site uses Google AdSense. <a href="/privacy" style={{ color: "var(--text-dim)", textDecoration: "underline" }}>Privacy Policy</a>
-        </p>
-      </footer>
     </>
   );
 }

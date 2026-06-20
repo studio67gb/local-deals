@@ -51,7 +51,10 @@ export default function BusinessLoginPage() {
               />
             </div>
             <div>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Password</label>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Password</label>
+                <a href="/business/forgot-password" style={{ fontSize: 11, color: "#0D9488", fontWeight: 600, textDecoration: "none" }}>Forgot Password?</a>
+              </div>
               <input
                 className="input"
                 type="password"
