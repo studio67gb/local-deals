@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Read the latest news, tips, and highlights from independent businesses in your area.",
 };
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const dynamic = 'force-dynamic';
 
 export default async function BlogIndexPage() {
   const posts = await prisma.blogPost.findMany({
