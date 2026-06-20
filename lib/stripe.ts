@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2024-06-20", // using a recent api version, or remove options if not needed
+  apiVersion: "2026-05-27.dahlia" as any, 
 });
 
 export const TIER_LIMITS: Record<string, number> = {
