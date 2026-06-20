@@ -57,7 +57,7 @@ function AdminBlogPage() {
 
   const loadPosts = async () => {
     // We can just fetch the public blog API, but since we are admin, we'll fetch everything
-    const r = await fetch("/api/blog");
+    const r = await fetch("/api/blog", { cache: 'no-store' });
     if (r.ok) {
       const data = await r.json();
       setPosts(data.posts || []);
