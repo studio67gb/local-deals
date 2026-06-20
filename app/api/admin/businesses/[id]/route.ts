@@ -73,3 +73,17 @@ export async function PATCH(
 
   return NextResponse.json(updated);
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const authErr = await requireAdmin(req);
+  if (authErr) return authErr;
+
+  const { id: rawId } = await params;
+  const id = parseInt(rawId);
+
+  await prisma.business.delete({ where: { id } }).catch(() => {});
+  return NextResponse.json({ ok: true });
+}

@@ -101,6 +101,16 @@ export default function EditBusinessPage() {
     else alert("Failed to delete deal");
   };
 
+  const deleteBusiness = async () => {
+    if (!confirm("CRITICAL WARNING: Are you sure you want to completely delete this business and all of its deals? This cannot be undone.")) return;
+    const r = await fetch(`/api/admin/businesses/${id}`, { method: 'DELETE' });
+    if (r.ok) {
+      router.push('/admin');
+    } else {
+      alert("Failed to delete business");
+    }
+  };
+
   if (loading) return <div style={{ textAlign: "center", padding: 80, color: "var(--text-muted)" }}>Loading...</div>;
 
   return (
@@ -224,6 +234,9 @@ export default function EditBusinessPage() {
         {error && <p style={{ color: '#f87171', fontSize: 13, textAlign: 'center' }}>{error}</p>}
 
         <div style={{ display: 'flex', gap: 12 }}>
+          <button type="button" onClick={deleteBusiness} style={{ padding: '16px 24px', background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: 12, color: '#f87171', fontSize: 14, fontWeight: 800, cursor: 'pointer' }}>
+            Delete Business
+          </button>
           <a href="/admin" className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center' }}>Cancel</a>
           <button className="btn btn-primary" type="submit" disabled={saving || uploadingLogo} style={{ flex: 2, justifyContent: 'center', padding: '16px 24px', fontSize: 15 }}>
             {uploadingLogo ? 'Uploading Logo…' : saving ? 'Saving…' : '✓ Save Changes'}
