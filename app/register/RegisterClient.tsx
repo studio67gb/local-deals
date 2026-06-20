@@ -146,11 +146,11 @@ function RegisterForm() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
               <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Create Password *</label>
-              <input className="input" required type="password" minLength={8} value={form.ownerPassword} onChange={e => set("ownerPassword", e.target.value)} placeholder="Min. 8 characters" />
+              <input className="input" required type="password" minLength={8} autoComplete="new-password" value={form.ownerPassword} onChange={e => set("ownerPassword", e.target.value)} placeholder="Min. 8 characters" />
             </div>
             <div>
               <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Confirm Password *</label>
-              <input className="input" required type="password" value={form.ownerPasswordConfirm} onChange={e => set("ownerPasswordConfirm", e.target.value)} placeholder="Repeat password" />
+              <input className="input" required type="password" autoComplete="new-password" value={form.ownerPasswordConfirm} onChange={e => set("ownerPasswordConfirm", e.target.value)} placeholder="Repeat password" />
             </div>
           </div>
           <p style={{ fontSize: 11, color: "var(--text-dim)" }}>You'll use these to log in and manage your deal at <strong>local-deals.uk/business/login</strong></p>

@@ -1,33 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
 import { prisma } from "@/lib/db";
 import { getBusinessSession } from "@/lib/auth";
 
 const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getBusinessSession(req);
   if (!session) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 
+  const dealId = parseInt((await params).id, 10);
+  if (isNaN(dealId)) return NextResponse.json({ error: "Invalid deal ID" }, { status: 400 });
+
+  // Verify the deal belongs to this business
+  const deal = await prisma.deal.findFirst({ where: { id: dealId, businessId: session.businessId } });
+  if (!deal) return NextResponse.json({ error: "Deal not found or not owned by you" }, { status: 404 });
+
   const formData = await req.formData();
-  const file = formData.get("logo") as File | null;
+  const file = formData.get("image") as File | null;
 
   if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
   if (!ALLOWED.includes(file.type)) return NextResponse.json({ error: "Only JPG, PNG, WebP or GIF allowed" }, { status: 400 });
   if (file.size > MAX_SIZE) return NextResponse.json({ error: "File must be under 5MB" }, { status: 400 });
 
   const { put } = await import("@vercel/blob");
-  const blob = await put(`logos/biz-${session.businessId}-${Date.now()}.${file.type.split("/")[1]}`, file, {
+  const blob = await put(`deals/deal-${dealId}-${Date.now()}.${file.type.split("/")[1]}`, file, {
     access: "public",
   });
 
-  const logoUrl = blob.url;
-  await prisma.business.update({
-    where: { id: session.businessId },
-    data: { logo: logoUrl },
+  const imageUrl = blob.url;
+  await prisma.deal.update({
+    where: { id: dealId },
+    data: { imageUrl: imageUrl },
   });
 
-  return NextResponse.json({ logo: logoUrl });
+  return NextResponse.json({ imageUrl });
 }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@types/bcryptjs": "^2.4.6",
+    "@vercel/blob": "^2.4.1",
     "bcryptjs": "^3.0.3",
     "jose": "^5.9.6",
     "lucide-react": "^0.511.0",

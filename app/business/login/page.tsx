@@ -45,6 +45,7 @@ export default function BusinessLoginPage() {
                 type="email"
                 required
                 autoFocus
+                autoComplete="username"
                 placeholder="you@yourbusiness.co.uk"
                 value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
@@ -59,6 +60,7 @@ export default function BusinessLoginPage() {
                 className="input"
                 type="password"
                 required
+                autoComplete="current-password"
                 placeholder="Your password"
                 value={form.password}
                 onChange={e => setForm(f => ({ ...f, password: e.target.value }))}

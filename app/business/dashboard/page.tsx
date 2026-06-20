@@ -156,6 +156,32 @@ function EditDealForm({ deal, onSaved, onDeleted }: { deal: Deal; onSaved: (d: D
           <input className="input" type="date" value={form.expiresAt} onChange={e => setForm(p => ({ ...p, expiresAt: e.target.value }))} />
         </div>
       </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 20 }}>
+        {deal.imageUrl ? (
+          <div style={{ width: 120, height: 80, borderRadius: 8, overflow: "hidden", position: "relative" }}>
+            <Image src={deal.imageUrl} alt="Deal" fill style={{ objectFit: "cover" }} sizes="120px" unoptimized />
+          </div>
+        ) : (
+          <div style={{ width: 120, height: 80, borderRadius: 8, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, border: "2px dashed var(--border)" }}>
+            📷
+          </div>
+        )}
+        <div style={{ flex: 1 }}>
+          <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Deal Image</label>
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const fd = new FormData();
+            fd.append("image", file);
+            const r = await fetch(`/api/business/deals/${deal.id}/upload-image`, { method: "POST", body: fd });
+            if (r.ok) {
+              const { imageUrl } = await r.json();
+              onSaved({ ...deal, imageUrl });
+            }
+          }} style={{ fontSize: 13, color: "var(--text-dim)" }} />
+          <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, marginBottom: 0 }}>Max 5MB. Horizontal image works best.</p>
+        </div>
+      </div>
       <div>
         <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>Terms & Conditions</label>
         <input className="input" placeholder="e.g. New customers only" value={form.terms} onChange={e => setForm(p => ({ ...p, terms: e.target.value }))} />
@@ -474,8 +500,9 @@ export default function BusinessDashboard() {
           </div>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button onClick={() => setTab("create")} className="btn btn-primary" style={{ fontSize: 13, padding: "10px 18px", background: "linear-gradient(135deg, #0D9488, #F43F5E)" }}>➕ Create Deal</button>
           {(business.tier === "free" || business.tier === "standard" || !business.tier) && (
-            <a href="/pricing" className="btn btn-primary" style={{ fontSize: 12, padding: "8px 16px" }}>⬆️ Upgrade</a>
+            <a href="/pricing" className="btn btn-ghost" style={{ fontSize: 12, padding: "8px 16px", border: "1px solid var(--border)" }}>⬆️ Upgrade</a>
           )}
           {business.stripeCustomerId && (
             <button onClick={async () => { const r = await fetch("/api/stripe/portal", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ businessId: business.id }) }); if (r.ok) { const { url } = await r.json(); window.location.href = url; } }} className="btn btn-ghost" style={{ fontSize: 12, padding: "8px 16px" }}>💳 Billing</button>
