@@ -46,6 +46,41 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             crossOrigin="anonymous"
           />
         )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": "https://local-deals.uk/#website",
+                  "url": "https://local-deals.uk",
+                  "name": "Local Deals UK",
+                  "description": "The premier B2B advertising and marketing platform for independent UK businesses to list local promotions, drive foot traffic, and connect with high-intent nearby customers.",
+                  "publisher": { "@id": "https://local-deals.uk/#organization" }
+                },
+                {
+                  "@type": "Organization",
+                  "@id": "https://local-deals.uk/#organization",
+                  "name": "Local Deals UK",
+                  "url": "https://local-deals.uk",
+                  "logo": "https://local-deals.uk/icon.png",
+                  "contactPoint": { "@type": "ContactPoint", "contactType": "customer support", "email": "support@local-deals.uk" }
+                },
+                {
+                  "@type": "Service",
+                  "@id": "https://local-deals.uk/#service",
+                  "name": "Local Business Advertising & Lead Generation",
+                  "provider": { "@id": "https://local-deals.uk/#organization" },
+                  "audience": { "@type": "Audience", "audienceType": "Independent UK Businesses" },
+                  "serviceType": "B2B Marketing & Local Directory Listing",
+                  "description": "A dynamic directory allowing independent merchants, trades, and retailers to advertise promotions and drive weekday foot traffic with zero upfront costs."
+                }
+              ]
+            })
+          }}
+        />
       </head>
       <body suppressHydrationWarning>
         <Navbar />
