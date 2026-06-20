@@ -138,6 +138,83 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         .blog-content strong { color: #fff; font-weight: 700; }
         .blog-content pre { background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; overflow-x: auto; margin-bottom: 24px; }
       `}} />
+
+      {/* Auto-display all tagged deals as cards */}
+      {post.deals.length > 0 && (
+        <section style={{ marginTop: 48, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 24, display: "flex", alignItems: "center", gap: 10 }}>
+            <span>🎁</span> {post.deals.length === 1 ? "Featured Deal" : "Featured Deals"}
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: post.deals.length > 1 ? "repeat(auto-fill, minmax(280px, 1fr))" : "1fr", gap: 20 }}>
+            {post.deals.map(deal => (
+              <a key={deal.id} href={`/deal/${deal.id}`} style={{ textDecoration: "none", display: "block" }}>
+                <div style={{
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  border: "1px solid rgba(13,148,136,0.25)",
+                  background: "linear-gradient(135deg, rgba(13,148,136,0.08), rgba(244,63,94,0.06))",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                }}>
+                  {/* Deal Image or Gradient Banner */}
+                  <div style={{
+                    height: 100,
+                    background: deal.imageUrl ? `url(${deal.imageUrl}) center/cover` : "linear-gradient(135deg, #0D9488, #F43F5E)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                  }}>
+                    {!deal.imageUrl && <span style={{ fontSize: 36 }}>🎁</span>}
+                    <div style={{
+                      position: "absolute",
+                      top: 12,
+                      right: 12,
+                      background: "rgba(0,0,0,0.7)",
+                      backdropFilter: "blur(8px)",
+                      padding: "4px 12px",
+                      borderRadius: 99,
+                      fontSize: 11,
+                      fontWeight: 800,
+                      color: "#4ade80",
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                    }}>
+                      Live Deal
+                    </div>
+                  </div>
+
+                  <div style={{ padding: 20 }}>
+                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: "#0D9488", marginBottom: 6, letterSpacing: 1 }}>
+                      Exclusive Offer
+                    </div>
+                    <h3 style={{ fontSize: 20, fontWeight: 900, color: "var(--text)", marginBottom: 8, marginTop: 0 }}>
+                      {deal.title}
+                    </h3>
+                    {deal.description && (
+                      <p style={{ fontSize: 14, color: "var(--text-dim)", marginBottom: 12, lineHeight: 1.5 }}>
+                        {deal.description}
+                      </p>
+                    )}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                      {deal.business.logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={deal.business.logo} alt={deal.business.name} style={{ width: 20, height: 20, borderRadius: 4, objectFit: "cover" }} />
+                      ) : (
+                        <span style={{ fontSize: 14 }}>🏪</span>
+                      )}
+                      <span style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>{deal.business.name}</span>
+                      <span style={{ fontSize: 12, color: "var(--text-dim)" }}>• {deal.business.area}</span>
+                    </div>
+                    <div className="btn btn-primary" style={{ width: "100%", justifyContent: "center", padding: "12px 16px", fontSize: 14, fontWeight: 800 }}>
+                      View Deal & Claim →
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 }
