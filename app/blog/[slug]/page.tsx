@@ -87,47 +87,45 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       )}
 
       {/* 
-        We use dangerouslySetInnerHTML here so that the LLM or Admin 
-        can supply rich HTML (like <h2>, <p>, <ul>) directly for SEO.
+        Parse shortcodes like [DEAL:1] or [BUSINESS:1] and inject the cards INLINE.
       */}
-      <div 
-        className="blog-content"
-        style={{ fontSize: 16, lineHeight: 1.8, color: "var(--text)" }}
-        dangerouslySetInnerHTML={{ __html: post.content }} 
-      />
+      <div className="blog-content" style={{ fontSize: 16, lineHeight: 1.8, color: "var(--text)" }}>
+        {post.content.split(/(\[(?:DEAL|BUSINESS):\d+\])/g).map((chunk, i) => {
+          const dealMatch = chunk.match(/\[DEAL:(\d+)\]/);
+          const bizMatch = chunk.match(/\[BUSINESS:(\d+)\]/);
 
-      {/* Highlighted Tagged Deals */}
-      {post.deals.length > 0 && (
-        <div style={{ marginTop: 64 }}>
-          <h2 style={{ fontSize: 24, fontWeight: 900, marginBottom: 24, textAlign: "center" }}>Featured Deals</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr))", gap: 20 }}>
-            {post.deals.map(deal => (
-              <div key={deal.id} style={{ padding: 24, borderRadius: 16, background: "linear-gradient(135deg, rgba(13,148,136,0.1), rgba(244,63,94,0.1))", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: "#0D9488", marginBottom: 8, letterSpacing: 1 }}>Exclusive Deal</div>
-                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>{deal.title}</h3>
+          if (dealMatch) {
+            const dealId = parseInt(dealMatch[1]);
+            const deal = post.deals.find(d => d.id === dealId);
+            if (!deal) return null;
+            return (
+              <div key={i} style={{ margin: "32px 0", padding: 24, borderRadius: 16, background: "linear-gradient(135deg, rgba(13,148,136,0.1), rgba(244,63,94,0.1))", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: "#0D9488", marginBottom: 8, letterSpacing: 1 }}>Featured Deal</div>
+                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8, color: "var(--text)", marginTop: 0 }}>{deal.title}</h3>
                 <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16, flex: 1 }}>Available at <strong>{deal.business.name}</strong></p>
-                <a href={`/deal/${deal.id}`} className="btn btn-primary" style={{ justifyContent: "center" }}>View Deal & Claim</a>
+                <a href={`/deal/${deal.id}`} className="btn btn-primary" style={{ alignSelf: "flex-start" }}>View Deal & Claim</a>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            );
+          }
 
-      {/* Highlighted Tagged Businesses (that don't have a specific deal tagged) */}
-      {post.businesses.length > 0 && (
-        <div style={{ marginTop: post.deals.length > 0 ? 32 : 64 }}>
-          <h2 style={{ fontSize: 24, fontWeight: 900, marginBottom: 24, textAlign: "center" }}>Featured Businesses</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr))", gap: 20 }}>
-            {post.businesses.map(biz => (
-              <div key={biz.id} style={{ padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", display: "flex", flexDirection: "column" }}>
-                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>{biz.name}</h3>
-                <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16, flex: 1 }}>{biz.description?.substring(0,80)}...</p>
-                <a href={`/deal?business=${biz.id}`} className="btn btn-orange" style={{ justifyContent: "center" }}>View Profile</a>
+          if (bizMatch) {
+            const bizId = parseInt(bizMatch[1]);
+            const biz = post.businesses.find(b => b.id === bizId);
+            if (!biz) return null;
+            return (
+              <div key={i} style={{ margin: "32px 0", padding: 24, borderRadius: 16, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: "#F43F5E", marginBottom: 8, letterSpacing: 1 }}>Featured Business</div>
+                <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8, color: "var(--text)", marginTop: 0 }}>{biz.name}</h3>
+                <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 16, flex: 1 }}>{biz.description?.substring(0,120)}...</p>
+                <a href={`/deal?business=${biz.id}`} className="btn btn-orange" style={{ alignSelf: "flex-start" }}>View Profile</a>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            );
+          }
+
+          // Otherwise, it's normal HTML content
+          return <div key={i} dangerouslySetInnerHTML={{ __html: chunk }} />;
+        })}
+      </div>
 
       {/* Basic styling for the injected HTML content */}
       <style dangerouslySetInnerHTML={{ __html: `

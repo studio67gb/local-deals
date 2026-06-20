@@ -173,6 +173,28 @@ export default function AdminBlogPage() {
             <div>
               <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: 8 }}>Content (Markdown or Text) *</label>
               <textarea className="input" required rows={12} value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} placeholder="Write your full blog post here. You can use Markdown formatting..." style={{ fontFamily: "monospace" }} />
+              
+              {/* Shortcode Helper */}
+              {(form.businessIds.length > 0 || form.dealIds.length > 0) && (
+                <div style={{ marginTop: 12, padding: 16, background: "rgba(255,255,255,0.03)", borderRadius: 8, fontSize: 13, border: "1px solid var(--border)" }}>
+                  <div style={{ fontWeight: 800, marginBottom: 8, color: "var(--text)" }}>💡 Inline Shortcodes</div>
+                  <p style={{ color: "var(--text-dim)", marginBottom: 12 }}>You can embed the businesses and deals you tagged directly *inside* your blog text! Just copy and paste these shortcodes exactly where you want the card to appear:</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {form.businessIds.map(id => {
+                      const b = businesses.find(bz => bz.id.toString() === id);
+                      return b ? <code key={`b-${id}`} style={{ background: "rgba(0,0,0,0.5)", padding: "4px 8px", borderRadius: 4, userSelect: "all" }}>[BUSINESS:{id}] - {b.name}</code> : null;
+                    })}
+                    {form.dealIds.map(id => {
+                      let dTitle = id;
+                      for (const bz of businesses) {
+                        const dl = bz.deals.find(d => d.id.toString() === id);
+                        if (dl) { dTitle = dl.title; break; }
+                      }
+                      return <code key={`d-${id}`} style={{ background: "rgba(0,0,0,0.5)", padding: "4px 8px", borderRadius: 4, userSelect: "all" }}>[DEAL:{id}] - {dTitle}</code>;
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>
