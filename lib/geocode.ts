@@ -2,7 +2,7 @@
  * Geocodes a UK address string to lat/lng using Google Maps Geocoding API
  */
 export async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
-  const key = process.env.GOOGLE_MAPS_API_KEY;
+  const key = process.env.GOOGLE_MAPS_API_KEY || process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
   if (!key || !address) return null;
 
   try {
